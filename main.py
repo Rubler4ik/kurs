@@ -252,25 +252,37 @@ class AboutProgram(AboutWindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
                          "Программа сортирует числовые данные\nПри помощи метода перемешивания")
 
-
-class StartWindow:
-    def __init__(self):
-        self.startwindow = Tk()
-        self.startwindow.title("Программа сортировщик")  # устанавливаем заголовок окна
-        self.startwindow.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
-        x = (self.startwindow.winfo_screenwidth() - self.startwindow.winfo_reqwidth()) / 2
-        y = (self.startwindow.winfo_screenheight() - self.startwindow.winfo_reqheight()) / 2
-        self.startwindow.geometry("+%d+%d" % (x, y))  # устанавливаем размеры окна
-        self.startwindow.resizable(False, False)
-        label = ttk.Label(
-            text="Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:\nСортировка числовых данных методом перемешивания",
-            justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+class MainsWindows:
+    def __init__(self, title, text,resizable, icon="materials/sort-2_icon-icons.com_69583.ico"):
+        self.window = Tk()
+        self.window.title(title)
+        self.window.iconbitmap(default=icon)
+        x = (self.window.winfo_screenwidth() - self.window.winfo_reqwidth()) / 2
+        y = (self.window.winfo_screenheight() - self.window.winfo_reqheight()) / 2
+        self.window.geometry("+%d+%d" % (x, y))
+        self.window.resizable(resizable, resizable)
+        label = ttk.Label(self.window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
-        self.startwindow.after(3000, self.close_start_window)
-        self.startwindow.mainloop()
+        self.window.mainloop()
+class StartWindow(MainsWindows):
+    def __init__(self):
+        super().__init__("Программа сортировщик","Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:\nСортировка числовых данных методом перемешивания",FALSE)
+        #self.startwindow = Tk()
+        #self.startwindow.title("Программа сортировщик")  # устанавливаем заголовок окна
+        #self.startwindow.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
+        #x = (self.startwindow.winfo_screenwidth() - self.startwindow.winfo_reqwidth()) / 2
+        #y = (self.startwindow.winfo_screenheight() - self.startwindow.winfo_reqheight()) / 2
+        #self.startwindow.geometry("+%d+%d" % (x, y))  # устанавливаем размеры окна
+
+        #label = ttk.Label(
+         #   text="Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:\nСортировка числовых данных методом перемешивания",
+          #  justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+        #label.pack(expand=True)
+        self.after(3000, self.close_start_window)
+        #self.startwindow.mainloop()
 
     def close_start_window(self):
-        self.startwindow.destroy()
+        self.StartWindow.destroy()
         self.main_window = MainWindow()
 
 

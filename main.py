@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import Tk
 import random
+import math
 
 def create_main_window():
     mainwindow = Tk()

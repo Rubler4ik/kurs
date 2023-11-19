@@ -58,15 +58,14 @@ class MainWindow(MainsWindows):
         self.digit_data = []
         self.digit_data_var = Variable(value=self.digit_data)
         self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
-        self.digit_data_listbox.pack(anchor=NW, fill=X, padx=5, pady=5)
+        self.digit_data_listbox.pack(expand=True, fill=BOTH, padx=5, pady=5)
 
         # привязываем событие двойного щелчка к listbox
         self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
 
         # создаем поле ввода для нового текста
         self.digit_data_entry = Entry()
-        self.digit_data_entry.pack(padx=5, pady=5)
-
+        self.digit_data_entry.pack(expand=True,padx=5, pady=5)
     def sort(self, type_sort):
 
         if type_sort == "upper":

@@ -206,13 +206,13 @@ class Sorted:
 
 
 class AboutWindow:
-    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
+    def __init__(self, mainwindow, title, text, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title(title)
         self._window.iconbitmap(default=icon)
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
-        self._window.resizable(False, False)
+        self._window.resizable(True, True)
 
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
@@ -222,19 +222,27 @@ class AboutWindow:
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
-                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com",
-                         "materials/VyR7Htj0Emo8-9AaljtTgRrGdMidKyidfwlDEGiJWCCh9kmhf2o4x2KotDCfhW6gfF1snuXukSzn1Ac6afGuVuWA.bmp")
+                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com")
 
+        self._window.canvas = Canvas(self._window, bg="white", width=250, height=200)
+        self._window.canvas.pack(anchor=CENTER, expand=1)
+
+        self.python_image = PhotoImage(file="materials/3123.png")
+
+        self._window.canvas.create_image(20, 20, anchor=NW, image=self.python_image)
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
-                         "Программа сортирует числовые данные\nПри помощи метода перемешивания",
-                         "materials/рудшгь333.jpg")
+                         "Программа сортирует числовые данные\nПри помощи метода перемешивания")
+        self._window.canvas = Canvas(self._window, bg="white", width=250, height=200)
+        self._window.canvas.pack(anchor=CENTER, expand=1)
 
+        self.python_image = PhotoImage(file="")
 
+        self._window.canvas.create_image(20, 20, anchor=NW, image=self.python_image)
 class GenerationWindow():
-    def __init__(self, mainwindow, digit, digit_data_listbox, icon="materials/sort-2_icon-icons.com_69583.ico"):
+    def __init__(self, mainwindow, digit, digit_data_listbox, icon=""):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)

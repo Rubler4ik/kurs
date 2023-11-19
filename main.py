@@ -115,7 +115,6 @@ class MainWindow:
         main_menu.add_cascade(label="Справка", menu=about)
 
         self.mainwindow.config(menu=main_menu)
-        # mainwindow.resizable(False, False)
         self.btn = ttk.Button(self.mainwindow, text="Сортировать", command=sort_type)
         self.btn.pack(anchor="nw", padx=20, pady=30, fill=X)
 

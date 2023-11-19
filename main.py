@@ -3,6 +3,7 @@ from tkinter.messagebox import showerror
 import random
 from tkinter import Toplevel, ttk
 
+
 class MainWindow:
     def __init__(self):
         self.mainwindow = Tk()
@@ -35,9 +36,6 @@ class MainWindow:
         def save_click():
             pass
 
-        def save_how_click():
-            pass
-
         def open_click():
             pass
 
@@ -57,7 +55,7 @@ class MainWindow:
             self.digit_data_listbox.insert(index, new_digit)
 
         def generation(digit, digit_count):
-             for _ in range(digit_count):
+            for _ in range(digit_count):
                 random_digit = random.randint(0, digit)
                 self.digit_data_listbox.insert(0, random_digit)
 
@@ -93,7 +91,6 @@ class MainWindow:
         about = Menu()
         generation_menu = Menu()
         file_menu.add_command(label="Сохранить", command=save_click)
-        file_menu.add_command(label="Сохранить как", command=save_how_click)
         file_menu.add_command(label="Открыть", command=open_click)
         file_menu.add_command(label="Очистить", command=clean_click)
         file_menu.add_separator()
@@ -108,7 +105,7 @@ class MainWindow:
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.mainwindow)])
         about.add_separator()
-        about.add_command(label="О программе", command=lambda:[AboutProgram(self.mainwindow)])
+        about.add_command(label="О программе", command=lambda: [AboutProgram(self.mainwindow)])
 
         main_menu.add_cascade(label="Файл", menu=file_menu)
         main_menu.add_cascade(label="Генерация чисел", menu=generation_menu)
@@ -242,13 +239,18 @@ class AboutWindow:
         label.pack(expand=True)
         self.window.grab_set()
 
+
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
-        super().__init__(mainwindow, "Сведения об авторе", "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com")
+        super().__init__(mainwindow, "Сведения об авторе",
+                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com")
+
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
-        super().__init__(mainwindow, "О программе: Сортировщик", "Программа сортирует числовые данные\nПри помощи метода перемешивания")
+        super().__init__(mainwindow, "О программе: Сортировщик",
+                         "Программа сортирует числовые данные\nПри помощи метода перемешивания")
+
 
 class StartWindow:
     def __init__(self):

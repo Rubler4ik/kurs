@@ -15,7 +15,7 @@ class MainWindow:
         self.mainwindow.option_add("*tearOff", FALSE)
 
         def sort(type_sort):
-            # ваша функция сортировки...
+
             if type_sort == "upper":
                 n = self.digit_data_listbox.size()
                 swapped = True

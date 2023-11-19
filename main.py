@@ -53,7 +53,8 @@ class MainWindow(MainsWindows):
         main_menu.add_cascade(label="Справка", menu=about)
 
         self.window.config(menu=main_menu)
-        self.btn = ttk.Button(self.window, text="Сортировать", command=self.sort_type)
+        self.btn = ttk.Button(self.window, text="Сортировать",
+                              command=lambda: [Sorted(self.window, self.digit_data_listbox)])
         self.btn.pack(anchor="nw", padx=20, pady=30, fill=X)
         self.digit_data = []
         self.digit_data_var = Variable(value=self.digit_data)
@@ -65,122 +66,9 @@ class MainWindow(MainsWindows):
 
         # создаем поле ввода для нового текста
         self.digit_data_entry = Entry()
-        self.digit_data_entry.pack(expand=True,padx=5, pady=5)
-    def sort(self, type_sort):
-
-        if type_sort == "upper":
-            n = self.digit_data_listbox.size()
-            swapped = True
-            start = 0
-            end = n - 1
-
-            while swapped:
-                swapped = False
-
-                # проходим слева направо
-                for i in range(start, end):
-                    if int(self.digit_data_listbox.get(i)) > int(
-                            self.digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self.digit_data_listbox.get(i)
-                        self.digit_data_listbox.delete(i)
-                        self.digit_data_listbox.insert(i, self.digit_data_listbox.get(i))
-                        self.digit_data_listbox.delete(i + 1)
-                        self.digit_data_listbox.insert(i + 1, temp)
-
-                        swapped = True
-
-                # если не было обмена, список отсортирован
-                if not swapped:
-                    break
-
-                swapped = False
-
-                # уменьшаем конец на один, так как последний элемент уже на своем месте
-                end -= 1
-
-                # проходим справа налево
-                for i in range(end - 1, start - 1, -1):
-                    if int(self.digit_data_listbox.get(i)) > int(
-                            self.digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self.digit_data_listbox.get(i)
-                        self.digit_data_listbox.delete(i)
-                        self.digit_data_listbox.insert(i, self.digit_data_listbox.get(i))
-                        self.digit_data_listbox.delete(i + 1)
-                        self.digit_data_listbox.insert(i + 1, temp)
-
-                        swapped = True
-
-                # увеличиваем начало, так как следующий первый элемент уже отсортирован
-                start += 1
-        if type_sort == "downer":
-            n = self.digit_data_listbox.size()
-            swapped = True
-            start = 0
-            end = n - 1
-
-            while swapped:
-                swapped = False
-
-                # проходим слева направо
-                for i in range(start, end):
-                    if int(self.digit_data_listbox.get(i)) < int(
-                            self.digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self.digit_data_listbox.get(i)
-                        self.digit_data_listbox.delete(i)
-                        self.digit_data_listbox.insert(i, self.digit_data_listbox.get(i))
-                        self.digit_data_listbox.delete(i + 1)
-                        self.digit_data_listbox.insert(i + 1, temp)
-
-                        swapped = True
-
-                # если не было обмена, список отсортирован
-                if not swapped:
-                    break
-
-                swapped = False
-
-                # уменьшаем конец на один, так как последний элемент уже на своем месте
-                end -= 1
-
-                # проходим справа налево
-                for i in range(end - 1, start - 1, -1):
-                    if int(self.digit_data_listbox.get(i)) < int(self.digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self.digit_data_listbox.get(i)
-                        self.digit_data_listbox.delete(i)
-                        self.digit_data_listbox.insert(i, self.digit_data_listbox.get(i))
-                        self.digit_data_listbox.delete(i + 1)
-                        self.digit_data_listbox.insert(i + 1, temp)
-
-                        swapped = True
-
-                # увеличиваем начало, так как следующий первый элемент уже отсортирован
-                start += 1
-
-    def sort_type(self):
-        sort_type_window = Tk()
-        sort_type_window.title("Выбор режима сортировки")
-        sort_type_window.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
-
-        sort_type_window.geometry(
-            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_reqwidth() // 2}+{self.window.winfo_screenheight() // 2 - self.window.winfo_reqwidth() // 2}")  # устанавливаем размеры окна
-        sort_type_window.option_add("*tearOff", FALSE)
-        label1 = ttk.Label(sort_type_window,
-                           text="Выберите тип сортировки: ",
-                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
-        label1.pack(expand=True)
-        btn1 = ttk.Button(sort_type_window, text="По возрастанию",
-                          command=lambda: [self.sort("upper"), sort_type_window.destroy()])
-        btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
-        btn2 = ttk.Button(sort_type_window, text="По убыванию",
-                          command=lambda: [self.sort("downer"), sort_type_window.destroy()])
-        btn2.pack(anchor="nw", padx=20, pady=30, fill=X)
+        self.digit_data_entry.pack(expand=True, padx=5, pady=5)
 
     def save_click(self):
-
         pass
 
     def open_click(self):
@@ -202,14 +90,130 @@ class MainWindow(MainsWindows):
         self.digit_data_listbox.insert(index, new_digit)
 
 
+class Sorted:
+    def __init__(self, mainwindow, digit_data_listbox):
+        self._window = Tk()
+        self._window.title("Выбор режима сортировки")
+        self._window.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")  # устанавливаем размеры окна
+        self._window.option_add("*tearOff", FALSE)
+        self._digit_data_listbox = digit_data_listbox
+        label1 = ttk.Label(self._window,
+                           text="Выберите тип сортировки: ",
+                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+        label1.pack(expand=True)
+        btn1 = ttk.Button(self._window, text="По возрастанию",
+                          command=lambda: [self.sort("upper"), self._window.destroy()])
+        btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
+        btn2 = ttk.Button(self._window, text="По убыванию",
+                          command=lambda: [self.sort("downer"), self._window.destroy()])
+        btn2.pack(anchor="nw", padx=20, pady=30, fill=X)
+
+    def sort(self, type_sort):
+
+        if type_sort == "upper":
+            n = self._digit_data_listbox.size()
+            swapped = True
+            start = 0
+            end = n - 1
+
+            while swapped:
+                swapped = False
+
+                # проходим слева направо
+                for i in range(start, end):
+                    if int(self._digit_data_listbox.get(i)) > int(
+                            self._digit_data_listbox.get(i + 1)):
+                        # меняем местами
+                        temp = self._digit_data_listbox.get(i)
+                        self._digit_data_listbox.delete(i)
+                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
+                        self._digit_data_listbox.delete(i + 1)
+                        self._digit_data_listbox.insert(i + 1, temp)
+
+                        swapped = True
+
+                # если не было обмена, список отсортирован
+                if not swapped:
+                    break
+
+                swapped = False
+
+                # уменьшаем конец на один, так как последний элемент уже на своем месте
+                end -= 1
+
+                # проходим справа налево
+                for i in range(end - 1, start - 1, -1):
+                    if int(self._digit_data_listbox.get(i)) > int(
+                            self._digit_data_listbox.get(i + 1)):
+                        # меняем местами
+                        temp = self._digit_data_listbox.get(i)
+                        self._digit_data_listbox.delete(i)
+                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
+                        self._digit_data_listbox.delete(i + 1)
+                        self._digit_data_listbox.insert(i + 1, temp)
+
+                        swapped = True
+
+                # увеличиваем начало, так как следующий первый элемент уже отсортирован
+                start += 1
+        if type_sort == "downer":
+            n = self._digit_data_listbox.size()
+            swapped = True
+            start = 0
+            end = n - 1
+
+            while swapped:
+                swapped = False
+
+                # проходим слева направо
+                for i in range(start, end):
+                    if int(self._digit_data_listbox.get(i)) < int(
+                            self._digit_data_listbox.get(i + 1)):
+                        # меняем местами
+                        temp = self._digit_data_listbox.get(i)
+                        self._digit_data_listbox.delete(i)
+                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
+                        self._digit_data_listbox.delete(i + 1)
+                        self._digit_data_listbox.insert(i + 1, temp)
+
+                        swapped = True
+
+                # если не было обмена, список отсортирован
+                if not swapped:
+                    break
+
+                swapped = False
+
+                # уменьшаем конец на один, так как последний элемент уже на своем месте
+                end -= 1
+
+                # проходим справа налево
+                for i in range(end - 1, start - 1, -1):
+                    if int(self._digit_data_listbox.get(i)) < int(self._digit_data_listbox.get(i + 1)):
+                        # меняем местами
+                        temp = self._digit_data_listbox.get(i)
+                        self._digit_data_listbox.delete(i)
+                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
+                        self._digit_data_listbox.delete(i + 1)
+                        self._digit_data_listbox.insert(i + 1, temp)
+
+                        swapped = True
+
+                # увеличиваем начало, так как следующий первый элемент уже отсортирован
+                start += 1
+
+
 class AboutWindow:
-    def __init__(self, mainwindow, title, text, icon="materials/sort-2_icon-icons.com_69583.ico"):
+    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title(title)
         self._window.iconbitmap(default=icon)
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(False, False)
+
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
         self._window.grab_set()
@@ -218,13 +222,15 @@ class AboutWindow:
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
-                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com")
+                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com",
+                         "materials/VyR7Htj0Emo8-9AaljtTgRrGdMidKyidfwlDEGiJWCCh9kmhf2o4x2KotDCfhW6gfF1snuXukSzn1Ac6afGuVuWA.bmp")
 
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
-                         "Программа сортирует числовые данные\nПри помощи метода перемешивания")
+                         "Программа сортирует числовые данные\nПри помощи метода перемешивания",
+                         "materials/рудшгь333.jpg")
 
 
 class GenerationWindow():

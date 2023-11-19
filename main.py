@@ -163,37 +163,6 @@ class MainWindow(MainsWindows):
             self.digit_data_listbox.delete(index)
             self.digit_data_listbox.insert(index, new_digit)
 
-        def generation(digit, digit_count):
-            for _ in range(digit_count):
-                random_digit = random.randint(0, digit)
-                self.digit_data_listbox.insert(0, random_digit)
-
-        def digit_generation(digit):
-            digitgeneration = Toplevel(self.window)
-            digitgeneration.title("Генератор чисел")
-            digitgeneration.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
-            digitgeneration.resizable(False, False)
-            label1 = ttk.Label(digitgeneration,
-                               text="Введите количество гинерируемых чисел: ",
-                               justify="center", background="#FFCDD2", font="Arial,30", padding=8)
-            label1.pack(expand=True)
-            digit_count_entry = Entry(digitgeneration)
-            digit_count_entry.pack(padx=5, pady=5)
-
-            btn1 = ttk.Button(digitgeneration, text="Генерировать",
-                              command=lambda: generate_numbers(digit, digit_count_entry, digitgeneration))
-            btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
-            digitgeneration.grab_set()
-
-        def generate_numbers(digit, digit_count_entry, digitgeneration):
-            try:
-                digit_count = int(digit_count_entry.get())
-            except ValueError:
-                showerror(title="Ошибка", message="Введено недопустимое значение. Пожалуйста, введите число.")
-            else:
-                generation(digit, digit_count)
-                digitgeneration.destroy()
-
         main_menu = Menu()
         file_menu = Menu()
         about = Menu()
@@ -205,11 +174,11 @@ class MainWindow(MainsWindows):
         file_menu.add_command(label="Выход", command=exit_click)
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [digit_generation(1000)])
+                                    command=lambda: [GenerationWindow(self.window,1000,self.digit_data_listbox)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [digit_generation(10000)])
+                                    command=lambda: [GenerationWindow(self.window,10000,self.digit_data_listbox)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [digit_generation(100000)])
+                                    command=lambda: [GenerationWindow(self.window,100000,self.digit_data_listbox)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -238,16 +207,16 @@ class MainWindow(MainsWindows):
 
 class AboutWindow:
     def __init__(self, mainwindow, title, text, icon="materials/sort-2_icon-icons.com_69583.ico"):
-        self.window = Toplevel(mainwindow)
-        self.window.title(title)
-        self.window.iconbitmap(default=icon)
-        x = (self.window.winfo_screenwidth() - self.window.winfo_reqwidth()) / 2
-        y = (self.window.winfo_screenheight() - self.window.winfo_reqheight()) / 2
-        self.window.geometry("+%d+%d" % (x, y))
-        self.window.resizable(False, False)
-        label = ttk.Label(self.window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+        self._window = Toplevel(mainwindow)
+        self._window.title(title)
+        self._window.iconbitmap(default=icon)
+        x = (self._window.winfo_screenwidth() - self._window.winfo_reqwidth()) / 2
+        y = (self._window.winfo_screenheight() - self._window.winfo_reqheight()) / 2
+        self._window.geometry("+%d+%d" % (x, y))
+        self._window.resizable(False, False)
+        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
-        self.window.grab_set()
+        self._window.grab_set()
 
 
 class AboutAuthor(AboutWindow):
@@ -260,6 +229,44 @@ class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
                          "Программа сортирует числовые данные\nПри помощи метода перемешивания")
+
+class GenerationWindow():
+    def __init__(self, mainwindow, digit, digit_data_listbox, icon="materials/sort-2_icon-icons.com_69583.ico"):
+        self._window = Toplevel(mainwindow)
+        self._window.title("Генератор чисел")
+        self._window.iconbitmap(default=icon)
+        x = (self._window.winfo_screenwidth() - self._window.winfo_reqwidth()) / 2
+        y = (self._window.winfo_screenheight() - self._window.winfo_reqheight()) / 2
+        self._window.geometry("+%d+%d" % (x, y))
+        self._window.resizable(False, False)
+        self._digit_data_listbox = digit_data_listbox
+        label1 = ttk.Label(self._window,
+                           text="Введите количество гинерируемых чисел: ",
+                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+        label1.pack(expand=True)
+        digit_count_entry = Entry(self._window)
+        digit_count_entry.pack(padx=5, pady=5)
+
+        btn1 = ttk.Button(self._window, text="Генерировать",
+                         command=lambda: self._generate_numbers(digit, digit_count_entry, self._window))
+        btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
+        self._window.grab_set()
+
+    def _generate_numbers(self, digit, digit_count_entry, digitgeneration):
+        try:
+            digit_count = int(digit_count_entry.get())
+        except ValueError:
+            showerror(title="Ошибка", message="Введено недопустимое значение. Пожалуйста, введите число.")
+        else:
+            self._generation(digit, digit_count)
+            digitgeneration.destroy()
+
+    def _generation(self, digit, digit_count):
+        for _ in range(digit_count):
+            random_digit = random.randint(0, digit)
+            self._digit_data_listbox.insert(0, random_digit)
+
+
 
 
 class StartWindow(MainsWindows):

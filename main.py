@@ -19,7 +19,6 @@ class MainsWindows:
             label = ttk.Label(self.window, text=text, justify="center", background="#FFCDD2", font="Arial,30",
                               padding=8)
             label.pack(expand=True)
-        # self.window.mainloop()
 
 
 class MainWindow(MainsWindows):

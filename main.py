@@ -1,7 +1,7 @@
 from tkinter import *
-from tkinter.messagebox import showerror, showwarning, showinfo
+from tkinter.messagebox import showerror
 import random
-
+from tkinter import Toplevel, ttk
 
 class MainWindow:
     def __init__(self):
@@ -106,9 +106,9 @@ class MainWindow:
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
                                     command=lambda: [digit_generation(100000)])
 
-        about.add_command(label="Об авторе", command=AboutAuthor)
+        about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.mainwindow)])
         about.add_separator()
-        about.add_command(label="О программе", command=AboutWindow)
+        about.add_command(label="О программе", command=lambda:[AboutProgram(self.mainwindow)])
 
         main_menu.add_cascade(label="Файл", menu=file_menu)
         main_menu.add_cascade(label="Генерация чисел", menu=generation_menu)
@@ -228,7 +228,7 @@ class MainWindow:
 
                 # увеличиваем начало, так как следующий первый элемент уже отсортирован
                 start += 1
-from tkinter import Toplevel, ttk
+
 
 class AboutWindow:
     def __init__(self, mainwindow, title, text, icon="materials/sort-2_icon-icons.com_69583.ico"):

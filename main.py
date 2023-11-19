@@ -10,9 +10,8 @@ class MainsWindows:
         self.window = Tk()
         self.window.title(title)
         self.window.iconbitmap(default=icon)
-        x = (self.window.winfo_screenwidth() - self.window.winfo_reqwidth()) / 2
-        y = (self.window.winfo_screenheight() - self.window.winfo_reqheight()) / 2
-        self.window.geometry("+%d+%d" % (x, y))
+        self.window.geometry(
+            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_reqwidth() // 2}+{self.window.winfo_screenheight() // 2 - self.window.winfo_reqwidth() // 2}")
         self.window.resizable(resizable, resizable)
         self.window.option_add("*tearOff", FALSE)
         if text != "":
@@ -39,11 +38,11 @@ class MainWindow(MainsWindows):
         file_menu.add_command(label="Выход", command=self.exit_click)
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [GenerationWindow(self.window,1000,self.digit_data_listbox)])
+                                    command=lambda: [GenerationWindow(self.window, 1000, self.digit_data_listbox)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [GenerationWindow(self.window,10000,self.digit_data_listbox)])
+                                    command=lambda: [GenerationWindow(self.window, 10000, self.digit_data_listbox)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [GenerationWindow(self.window,100000,self.digit_data_listbox)])
+                                    command=lambda: [GenerationWindow(self.window, 100000, self.digit_data_listbox)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -166,9 +165,9 @@ class MainWindow(MainsWindows):
         sort_type_window = Tk()
         sort_type_window.title("Выбор режима сортировки")
         sort_type_window.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
-        x = (sort_type_window.winfo_screenwidth() - sort_type_window.winfo_reqwidth()) / 2
-        y = (sort_type_window.winfo_screenheight() - sort_type_window.winfo_reqheight()) / 2
-        sort_type_window.geometry("+%d+%d" % (x, y))  # устанавливаем размеры окна
+
+        sort_type_window.geometry(
+            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_reqwidth() // 2}+{self.window.winfo_screenheight() // 2 - self.window.winfo_reqwidth() // 2}")  # устанавливаем размеры окна
         sort_type_window.option_add("*tearOff", FALSE)
         label1 = ttk.Label(sort_type_window,
                            text="Выберите тип сортировки: ",
@@ -194,7 +193,7 @@ class MainWindow(MainsWindows):
     def exit_click(self):
         self.window.destroy()
 
-    def change_item(self,event):
+    def change_item(self, event):
         # получаем индекс выделенного элемента
         index = self.digit_data_listbox.curselection()[0]
         # получаем новый текст из поля ввода
@@ -203,14 +202,14 @@ class MainWindow(MainsWindows):
         self.digit_data_listbox.delete(index)
         self.digit_data_listbox.insert(index, new_digit)
 
+
 class AboutWindow:
     def __init__(self, mainwindow, title, text, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title(title)
         self._window.iconbitmap(default=icon)
-        x = (self._window.winfo_screenwidth() - self._window.winfo_reqwidth()) / 2
-        y = (self._window.winfo_screenheight() - self._window.winfo_reqheight()) / 2
-        self._window.geometry("+%d+%d" % (x, y))
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(False, False)
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
@@ -228,14 +227,14 @@ class AboutProgram(AboutWindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
                          "Программа сортирует числовые данные\nПри помощи метода перемешивания")
 
+
 class GenerationWindow():
     def __init__(self, mainwindow, digit, digit_data_listbox, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
-        x = (self._window.winfo_screenwidth() - self._window.winfo_reqwidth()) / 2
-        y = (self._window.winfo_screenheight() - self._window.winfo_reqheight()) / 2
-        self._window.geometry("+%d+%d" % (x, y))
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(False, False)
         self._digit_data_listbox = digit_data_listbox
         label1 = ttk.Label(self._window,
@@ -246,7 +245,7 @@ class GenerationWindow():
         digit_count_entry.pack(padx=5, pady=5)
 
         btn1 = ttk.Button(self._window, text="Генерировать",
-                         command=lambda: self._generate_numbers(digit, digit_count_entry, self._window))
+                          command=lambda: self._generate_numbers(digit, digit_count_entry, self._window))
         btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
         self._window.grab_set()
 
@@ -263,8 +262,6 @@ class GenerationWindow():
         for _ in range(digit_count):
             random_digit = random.randint(0, digit)
             self._digit_data_listbox.insert(0, random_digit)
-
-
 
 
 class StartWindow(MainsWindows):

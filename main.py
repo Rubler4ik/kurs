@@ -202,7 +202,6 @@ class MainWindow(MainsWindows):
         # создаем поле ввода для нового текста
         self.digit_data_entry = Entry()
         self.digit_data_entry.pack(padx=5, pady=5)
-        # self.mainwindow.mainloop()
 
 
 class AboutWindow:

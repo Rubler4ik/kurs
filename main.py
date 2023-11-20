@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.messagebox import showerror
 import random
 from tkinter import Toplevel, ttk
+from PIL import Image, ImageTk
 import time
 
 
@@ -53,9 +54,20 @@ class MainWindow(MainsWindows):
         main_menu.add_cascade(label="Справка", menu=about)
 
         self.window.config(menu=main_menu)
+        upper = "upper"
+        downer = "downer"
+        self.sort = StringVar(value=upper)
+        position = {"padx": 6, "pady": 6, "anchor": CENTER}
+        self.btn_radio_up = ttk.Radiobutton(self.window, text="По вохрастанию", value=upper, variable=self.sort)
+        self.btn_radio_up.pack(**position)
+        self.btn_radio_down = ttk.Radiobutton(self.window, text="По убыванию", value=downer, variable=self.sort)
+        self.btn_radio_down.pack(**position)
+
         self.btn = ttk.Button(self.window, text="Сортировать",
-                              command=lambda: [Sorted(self.window, self.digit_data_listbox)])
-        self.btn.pack(anchor="nw", padx=20, pady=30, fill=X)
+                              command=lambda: [Sorted.sort(self.window,self.digit_data_listbox,self.sort.get())])
+        self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
+
+
         self.digit_data = []
         self.digit_data_var = Variable(value=self.digit_data)
         self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
@@ -91,27 +103,9 @@ class MainWindow(MainsWindows):
 
 
 class Sorted:
-    def __init__(self, mainwindow, digit_data_listbox):
-        self._window = Tk()
-        self._window.title("Выбор режима сортировки")
-        self._window.iconbitmap(default="materials/sort-2_icon-icons.com_69583.ico")
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")  # устанавливаем размеры окна
-        self._window.option_add("*tearOff", FALSE)
+
+    def sort(self,digit_data_listbox, type_sort):
         self._digit_data_listbox = digit_data_listbox
-        label1 = ttk.Label(self._window,
-                           text="Выберите тип сортировки: ",
-                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
-        label1.pack(expand=True)
-        btn1 = ttk.Button(self._window, text="По возрастанию",
-                          command=lambda: [self.sort("upper"), self._window.destroy()])
-        btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
-        btn2 = ttk.Button(self._window, text="По убыванию",
-                          command=lambda: [self.sort("downer"), self._window.destroy()])
-        btn2.pack(anchor="nw", padx=20, pady=30, fill=X)
-
-    def sort(self, type_sort):
-
         if type_sort == "upper":
             n = self._digit_data_listbox.size()
             swapped = True
@@ -206,14 +200,16 @@ class Sorted:
 
 
 class AboutWindow:
-    def __init__(self, mainwindow, title, text, icon="materials/sort-2_icon-icons.com_69583.ico"):
+    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title(title)
         self._window.iconbitmap(default=icon)
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(True, True)
-
+        self._window.author = Image.open(image).resize((160, 90))
+        self._window.author_tk = ImageTk.PhotoImage(self._window.author)
+        ttk.Label(self._window, image=self._window.author_tk).pack(side='left')
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
         self._window.grab_set()
@@ -222,25 +218,15 @@ class AboutWindow:
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
-                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com")
+                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com",'materials/photo_2023-11-20_11-17-08.jpg')
 
-        self._window.canvas = Canvas(self._window, bg="white", width=250, height=200)
-        self._window.canvas.pack(anchor=CENTER, expand=1)
-
-        self.python_image = PhotoImage(file="materials/3123.png")
-
-        self._window.canvas.create_image(20, 20, anchor=NW, image=self.python_image)
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
                          "Программа сортирует числовые данные\nПри помощи метода перемешивания")
-        self._window.canvas = Canvas(self._window, bg="white", width=250, height=200)
-        self._window.canvas.pack(anchor=CENTER, expand=1)
 
-        self.python_image = PhotoImage(file="")
 
-        self._window.canvas.create_image(20, 20, anchor=NW, image=self.python_image)
 class GenerationWindow():
     def __init__(self, mainwindow, digit, digit_data_listbox, icon=""):
         self._window = Toplevel(mainwindow)

@@ -26,7 +26,7 @@ class MainWindow(MainsWindows):
         super().__init__("Программа сортировщик",
                          "",
                          TRUE)
-        self.window.geometry("500x300")  # устанавливаем размеры окна
+        self.window.geometry("550x350")  # устанавливаем размеры окна
 
         main_menu = Menu()
         file_menu = Menu()
@@ -64,10 +64,11 @@ class MainWindow(MainsWindows):
         self.btn_radio_down.pack(**position)
 
         self.btn = ttk.Button(self.window, text="Сортировать",
-                              command=lambda: [Sorted.sort(self.window,self.digit_data_listbox,self.sort.get())])
+                              command=lambda: [Sorted.sort(self.window, self.digit_data_listbox, self.sort.get(),
+                                                           self.result_label)])
         self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
-
-
+        self.result_label = ttk.Label(self.window, text="")
+        self.result_label.pack()
         self.digit_data = []
         self.digit_data_var = Variable(value=self.digit_data)
         self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
@@ -77,10 +78,14 @@ class MainWindow(MainsWindows):
         self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
 
         # создаем поле ввода для нового текста
+        self.label2 = ttk.Label(self.window,
+                                text="Введите значение на которое нужно поменять, после чего дважды кликните на нужный элемент:")
+        self.label2.pack(expand=True)
         self.digit_data_entry = Entry()
         self.digit_data_entry.pack(expand=True, padx=5, pady=5)
 
     def save_click(self):
+
         pass
 
     def open_click(self):
@@ -93,25 +98,36 @@ class MainWindow(MainsWindows):
         self.window.destroy()
 
     def change_item(self, event):
-        # получаем индекс выделенного элемента
-        index = self.digit_data_listbox.curselection()[0]
-        # получаем новый текст из поля ввода
-        new_digit = self.digit_data_entry.get()
-        # заменяем элемент по индексу на новый текст
-        self.digit_data_listbox.delete(index)
-        self.digit_data_listbox.insert(index, new_digit)
+        try:
+            # получаем индекс выделенного элемента
+            index = self.digit_data_listbox.curselection()[0]
+            # получаем новый текст из поля ввода
+
+        except IndexError:
+            showerror("Ошибка", "Вы промахнулись, попробуйте снова!")
+
+        else:
+            try:
+                new_digit = int(self.digit_data_entry.get())
+            except  ValueError:
+                showerror("Ошибка", "Вы ввели не верное значение")
+            else:
+                # заменяем элемент по индексу на новый текст
+                self.digit_data_listbox.delete(index)
+                self.digit_data_listbox.insert(index, new_digit)
 
 
 class Sorted:
 
-    def sort(self,digit_data_listbox, type_sort):
+    def sort(self, digit_data_listbox, type_sort, result_label):
         self._digit_data_listbox = digit_data_listbox
+        self._result_label = result_label
         if type_sort == "upper":
             n = self._digit_data_listbox.size()
             swapped = True
             start = 0
             end = n - 1
-
+            start_time = time.time()
             while swapped:
                 swapped = False
 
@@ -152,11 +168,14 @@ class Sorted:
 
                 # увеличиваем начало, так как следующий первый элемент уже отсортирован
                 start += 1
+            end_time = time.time()
+
         if type_sort == "downer":
             n = self._digit_data_listbox.size()
             swapped = True
             start = 0
             end = n - 1
+            start_time = time.time()
 
             while swapped:
                 swapped = False
@@ -197,20 +216,23 @@ class Sorted:
 
                 # увеличиваем начало, так как следующий первый элемент уже отсортирован
                 start += 1
+                end_time = time.time()
+        execution_time = round((end_time - start_time), 5)
+        self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
 
 class AboutWindow:
     def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title(title)
-        self._window["bg"]="#FFCDD2"
+        self._window["bg"] = "#FFCDD2"
         self._window.iconbitmap(default=icon)
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(True, True)
-        self._window.author = Image.open(image).resize((140, 160))
-        self._window.author_tk = ImageTk.PhotoImage(self._window.author)
-        ttk.Label(self._window, image=self._window.author_tk).pack(side='left')
+        self._window.about = Image.open(image).resize((160, 180))
+        self._window.about_tk = ImageTk.PhotoImage(self._window.about)
+        ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
         self._window.grab_set()
@@ -219,13 +241,14 @@ class AboutWindow:
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
-                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com",'materials/photo_2023-11-20_11-17-08.jpg')
+                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com",
+                         'materials/photo_2023-11-20_11-17-08.jpg')
 
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
-                         "Программа сортирует числовые данные\nПри помощи метода перемешивания")
+                         "Программа сортирует числовые данные\nПри помощи метода перемешивания", 'materials/images.png')
 
 
 class GenerationWindow():

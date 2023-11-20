@@ -109,17 +109,16 @@ class MainWindow(MainsWindows):
         self.frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
 
-
         self.hscrollbar = tk.Scrollbar(self.window, orient="horizontal", command=self.canvas.xview)
         self.hscrollbar.pack(side="bottom", fill="x")
         self.canvas.configure(xscrollcommand=self.hscrollbar.set)
-        #self.digit_data = []
-        #self.digit_data_var = Variable(value=self.digit_data)
-        #self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
-        #self.digit_data_listbox.pack(expand=True, fill=BOTH, padx=5, pady=5)
+        # self.digit_data = []
+        # self.digit_data_var = Variable(value=self.digit_data)
+        # self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
+        # self.digit_data_listbox.pack(expand=True, fill=BOTH, padx=5, pady=5)
 
         # привязываем событие двойного щелчка к listbox
-        #self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
+        # self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
 
         # создаем поле ввода для нового текста
         self.label2 = ttk.Label(self.window,
@@ -287,7 +286,7 @@ class GenerationWindow:
         digit_count_entry.pack(padx=5, pady=5)
 
         btn1 = ttk.Button(self._window, text="Генерировать",
-                          command=lambda: self._generate_numbers(self._window,digit, digit_count_entry ))
+                          command=lambda: self._generate_numbers(self._window, digit, digit_count_entry))
         btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
         self._window.grab_set()
 
@@ -301,7 +300,7 @@ class GenerationWindow:
             window.destroy()
 
     def _generation(self, digit, digit_count):
-         for i in range(digit_count):  # Пример: 33 элемента
+        for i in range(digit_count):  # Пример: 33 элемента
             random_digit = random.randint(0, digit)
             tk.Label(self._frame, text=f"{random_digit}").grid(row=i % 10, column=i // 10, sticky="nsew")
 

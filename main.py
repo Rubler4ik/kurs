@@ -203,11 +203,12 @@ class AboutWindow:
     def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
         self._window.title(title)
+        self._window["bg"]="#FFCDD2"
         self._window.iconbitmap(default=icon)
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(True, True)
-        self._window.author = Image.open(image).resize((160, 90))
+        self._window.author = Image.open(image).resize((140, 160))
         self._window.author_tk = ImageTk.PhotoImage(self._window.author)
         ttk.Label(self._window, image=self._window.author_tk).pack(side='left')
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
@@ -234,7 +235,7 @@ class GenerationWindow():
         self._window.iconbitmap(default=icon)
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
-        self._window.resizable(False, False)
+        self._window.resizable(True, True)
         self._digit_data_listbox = digit_data_listbox
         label1 = ttk.Label(self._window,
                            text="Введите количество гинерируемых чисел: ",

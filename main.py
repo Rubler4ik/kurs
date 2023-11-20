@@ -195,12 +195,8 @@ class Sort:
                 for i in range(end - 1, start - 1, -1):
                     if int(self._digit_data_listbox.get(i)) > int(
                             self._digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self._digit_data_listbox.get(i)
-                        self._digit_data_listbox.delete(i)
-                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
-                        self._digit_data_listbox.delete(i + 1)
-                        self._digit_data_listbox.insert(i + 1, temp)
+
+
 
                         swapped = True
 

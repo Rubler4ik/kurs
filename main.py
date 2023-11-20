@@ -1,7 +1,9 @@
+import tkinter
 from tkinter import *
 from tkinter.messagebox import showerror
 import random
 from tkinter import Toplevel, ttk
+import tkinter as tk
 from PIL import Image, ImageTk
 import time
 
@@ -72,11 +74,11 @@ class MainWindow(MainsWindows):
         file_menu.add_command(label="Выход", command=self.exit_click)
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [GenerationWindow(self.window, 1000, self.digit_data_listbox)])
+                                    command=lambda: [GenerationWindow(self.window, 1000, self.frame)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [GenerationWindow(self.window, 10000, self.digit_data_listbox)])
+                                    command=lambda: [GenerationWindow(self.window, 10000, self.frame)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [GenerationWindow(self.window, 100000, self.digit_data_listbox)])
+                                    command=lambda: [GenerationWindow(self.window, 100000, self.frame)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -101,13 +103,23 @@ class MainWindow(MainsWindows):
         self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.result_label = ttk.Label(self.window, text="")
         self.result_label.pack()
-        self.digit_data = []
-        self.digit_data_var = Variable(value=self.digit_data)
-        self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
-        self.digit_data_listbox.pack(expand=True, fill=BOTH, padx=5, pady=5)
+        self.canvas = tk.Canvas(self.window)
+        self.canvas.pack(side="top", fill="both", expand=True)
+
+        self.frame = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
+
+
+        self.hscrollbar = tk.Scrollbar(self.window, orient="horizontal", command=self.canvas.xview)
+        self.hscrollbar.pack(side="bottom", fill="x")
+        self.canvas.configure(xscrollcommand=self.hscrollbar.set)
+        #self.digit_data = []
+        #self.digit_data_var = Variable(value=self.digit_data)
+        #self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
+        #self.digit_data_listbox.pack(expand=True, fill=BOTH, padx=5, pady=5)
 
         # привязываем событие двойного щелчка к listbox
-        self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
+        #self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
 
         # создаем поле ввода для нового текста
         self.label2 = ttk.Label(self.window,
@@ -258,7 +270,7 @@ class AboutProgram(AboutWindow):
 
 
 class GenerationWindow:
-    def __init__(self, mainwindow, digit, digit_data_listbox, icon=""):
+    def __init__(self, mainwindow, digit, frame, icon=""):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
@@ -266,7 +278,7 @@ class GenerationWindow:
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+"
             f"{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(True, True)
-        self._digit_data_listbox = digit_data_listbox
+        self._frame = frame
         label1 = ttk.Label(self._window,
                            text="Введите количество гинерируемых чисел: ",
                            justify="center", background="#FFCDD2", font="Arial,30", padding=8)
@@ -275,23 +287,23 @@ class GenerationWindow:
         digit_count_entry.pack(padx=5, pady=5)
 
         btn1 = ttk.Button(self._window, text="Генерировать",
-                          command=lambda: self._generate_numbers(digit, digit_count_entry, self._window))
+                          command=lambda: self._generate_numbers(self._window,digit, digit_count_entry ))
         btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
         self._window.grab_set()
 
-    def _generate_numbers(self, digit, digit_count_entry, digitgeneration):
+    def _generate_numbers(self, window, digit, digit_count_entry):
         try:
             digit_count = int(digit_count_entry.get())
         except ValueError:
             showerror(title="Ошибка", message="Введено недопустимое значение. Пожалуйста, введите число.")
         else:
             self._generation(digit, digit_count)
-            digitgeneration.destroy()
+            window.destroy()
 
     def _generation(self, digit, digit_count):
-        for _ in range(digit_count):
+         for i in range(digit_count):  # Пример: 33 элемента
             random_digit = random.randint(0, digit)
-            self._digit_data_listbox.insert(0, random_digit)
+            tk.Label(self._frame, text=f"{random_digit}").grid(row=i % 10, column=i // 10, sticky="nsew")
 
 
 start_window = StartWindow()

@@ -12,13 +12,46 @@ class MainsWindows:
         self.window.title(title)
         self.window.iconbitmap(default=icon)
         self.window.geometry(
-            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_reqwidth() // 2}+{self.window.winfo_screenheight() // 2 - self.window.winfo_reqwidth() // 2}")
+            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_reqwidth() // 2}+"
+            f"{self.window.winfo_screenheight() // 2 - self.window.winfo_reqwidth() // 2}")
         self.window.resizable(resizable, resizable)
         self.window.option_add("*tearOff", FALSE)
         if text != "":
             label = ttk.Label(self.window, text=text, justify="center", background="#FFCDD2", font="Arial,30",
                               padding=8)
             label.pack(expand=True)
+
+
+class AboutWindow:
+    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
+        self._window = Toplevel(mainwindow)
+        self._window.title(title)
+        self._window["bg"] = "#FFCDD2"
+        self._window.iconbitmap(default=icon)
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+"
+            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
+        self._window.resizable(False, False)
+        self._window.about = Image.open(image).resize((160, 180))
+        self._window.about_tk = ImageTk.PhotoImage(self._window.about)
+        ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
+        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+        label.pack(expand=True)
+        self._window.grab_set()
+
+
+class StartWindow(MainsWindows):
+    def __init__(self):
+        super().__init__("Программа сортировщик",
+                         "Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:"
+                         "\nСортировка числовых данных методом перемешивания",
+                         FALSE)
+        self.window.after(3000, self.close_start_window)
+
+    def close_start_window(self):
+        self.window.destroy()
+        self.main_window = MainWindow()
+        self.main_window.window.mainloop()
 
 
 class MainWindow(MainsWindows):
@@ -79,7 +112,8 @@ class MainWindow(MainsWindows):
 
         # создаем поле ввода для нового текста
         self.label2 = ttk.Label(self.window,
-                                text="Введите значение на которое нужно поменять, после чего дважды кликните на нужный элемент:")
+                                text="Введите значение на которое нужно поменять, "
+                                     "после чего дважды кликните на нужный элемент:")
         self.label2.pack(expand=True)
         self.digit_data_entry = Entry()
         self.digit_data_entry.pack(expand=True, padx=5, pady=5)
@@ -109,7 +143,7 @@ class MainWindow(MainsWindows):
         else:
             try:
                 new_digit = int(self.digit_data_entry.get())
-            except  ValueError:
+            except ValueError:
                 showerror("Ошибка", "Вы ввели не верное значение")
             else:
                 # заменяем элемент по индексу на новый текст
@@ -118,6 +152,10 @@ class MainWindow(MainsWindows):
 
 
 class Sorted:
+
+    def __init__(self):
+        self._digit_data_listbox = None
+        self._result_label = None
 
     def sort(self, digit_data_listbox, type_sort, result_label):
         self._digit_data_listbox = digit_data_listbox
@@ -221,23 +259,6 @@ class Sorted:
         self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
 
-class AboutWindow:
-    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
-        self._window = Toplevel(mainwindow)
-        self._window.title(title)
-        self._window["bg"] = "#FFCDD2"
-        self._window.iconbitmap(default=icon)
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
-        self._window.resizable(True, True)
-        self._window.about = Image.open(image).resize((160, 180))
-        self._window.about_tk = ImageTk.PhotoImage(self._window.about)
-        ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
-        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
-        label.pack(expand=True)
-        self._window.grab_set()
-
-
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
@@ -251,13 +272,14 @@ class AboutProgram(AboutWindow):
                          "Программа сортирует числовые данные\nПри помощи метода перемешивания", 'materials/images.png')
 
 
-class GenerationWindow():
+class GenerationWindow:
     def __init__(self, mainwindow, digit, digit_data_listbox, icon=""):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
         self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+"
+            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(True, True)
         self._digit_data_listbox = digit_data_listbox
         label1 = ttk.Label(self._window,
@@ -285,19 +307,6 @@ class GenerationWindow():
         for _ in range(digit_count):
             random_digit = random.randint(0, digit)
             self._digit_data_listbox.insert(0, random_digit)
-
-
-class StartWindow(MainsWindows):
-    def __init__(self):
-        super().__init__("Программа сортировщик",
-                         "Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:\nСортировка числовых данных методом перемешивания",
-                         FALSE)
-        self.window.after(3000, self.close_start_window)
-
-    def close_start_window(self):
-        self.window.destroy()
-        self.main_window = MainWindow()
-        self.main_window.window.mainloop()
 
 
 start_window = StartWindow()

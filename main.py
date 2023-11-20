@@ -97,7 +97,7 @@ class MainWindow(MainsWindows):
         self.btn_radio_down.pack(**position)
 
         self.btn = ttk.Button(self.window, text="Сортировать",
-                              command=lambda: [Sorted.sort(self.window, self.digit_data_listbox, self.sort.get(),
+                              command=lambda: [Sort.sort(self.window, self.digit_data_listbox, self.sort.get(),
                                                            self.result_label)])
         self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.result_label = ttk.Label(self.window, text="")
@@ -151,7 +151,7 @@ class MainWindow(MainsWindows):
                 self.digit_data_listbox.insert(index, new_digit)
 
 
-class Sorted:
+class Sort:
 
     def __init__(self):
         self._digit_data_listbox = None

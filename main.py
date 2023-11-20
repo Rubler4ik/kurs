@@ -89,16 +89,15 @@ class MainWindow(MainsWindows):
         self.window.config(menu=main_menu)
         upper = "upper"
         downer = "downer"
-        self.sort = StringVar(value=upper)
+        self.Sort = StringVar(value=upper)
         position = {"padx": 6, "pady": 6, "anchor": CENTER}
-        self.btn_radio_up = ttk.Radiobutton(self.window, text="По вохрастанию", value=upper, variable=self.sort)
+        self.btn_radio_up = ttk.Radiobutton(self.window, text="По вохрастанию", value=upper, variable=self.Sort)
         self.btn_radio_up.pack(**position)
-        self.btn_radio_down = ttk.Radiobutton(self.window, text="По убыванию", value=downer, variable=self.sort)
+        self.btn_radio_down = ttk.Radiobutton(self.window, text="По убыванию", value=downer, variable=self.Sort)
         self.btn_radio_down.pack(**position)
 
         self.btn = ttk.Button(self.window, text="Сортировать",
-                              command=lambda: [Sort.sort(self.window, self.digit_data_listbox, self.sort.get(),
-                                                           self.result_label)])
+                              command=lambda: self.sort(self.digit_data_listbox, self.Sort.get(), self.result_label))
         self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.result_label = ttk.Label(self.window, text="")
         self.result_label.pack()
@@ -130,32 +129,6 @@ class MainWindow(MainsWindows):
 
     def exit_click(self):
         self.window.destroy()
-
-    def change_item(self, event):
-        try:
-            # получаем индекс выделенного элемента
-            index = self.digit_data_listbox.curselection()[0]
-            # получаем новый текст из поля ввода
-
-        except IndexError:
-            showerror("Ошибка", "Вы промахнулись, попробуйте снова!")
-
-        else:
-            try:
-                new_digit = int(self.digit_data_entry.get())
-            except ValueError:
-                showerror("Ошибка", "Вы ввели не верное значение")
-            else:
-                # заменяем элемент по индексу на новый текст
-                self.digit_data_listbox.delete(index)
-                self.digit_data_listbox.insert(index, new_digit)
-
-
-class Sort:
-
-    def __init__(self):
-        self._digit_data_listbox = None
-        self._result_label = None
 
     def sort(self, digit_data_listbox, type_sort, result_label):
         self._digit_data_listbox = digit_data_listbox
@@ -195,9 +168,6 @@ class Sort:
                 for i in range(end - 1, start - 1, -1):
                     if int(self._digit_data_listbox.get(i)) > int(
                             self._digit_data_listbox.get(i + 1)):
-
-
-
                         swapped = True
 
                 # увеличиваем начало, так как следующий первый элемент уже отсортирован
@@ -253,6 +223,25 @@ class Sort:
                 end_time = time.time()
         execution_time = round((end_time - start_time), 5)
         self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
+
+    def change_item(self, event):
+        try:
+            # получаем индекс выделенного элемента
+            index = self.digit_data_listbox.curselection()[0]
+            # получаем новый текст из поля ввода
+
+        except IndexError:
+            showerror("Ошибка", "Вы промахнулись, попробуйте снова!")
+
+        else:
+            try:
+                new_digit = int(self.digit_data_entry.get())
+            except ValueError:
+                showerror("Ошибка", "Вы ввели не верное значение")
+            else:
+                # заменяем элемент по индексу на новый текст
+                self.digit_data_listbox.delete(index)
+                self.digit_data_listbox.insert(index, new_digit)
 
 
 class AboutAuthor(AboutWindow):

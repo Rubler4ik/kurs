@@ -93,7 +93,7 @@ class MainWindow(MainsWindows):
         downer = "downer"
         self.Sort = StringVar(value=upper)
         position = {"padx": 6, "pady": 6, "anchor": CENTER}
-        self.btn_radio_up = ttk.Radiobutton(self.window, text="По вохрастанию", value=upper, variable=self.Sort)
+        self.btn_radio_up = ttk.Radiobutton(self.window, text="По возрастанию", value=upper, variable=self.Sort)
         self.btn_radio_up.pack(**position)
         self.btn_radio_down = ttk.Radiobutton(self.window, text="По убыванию", value=downer, variable=self.Sort)
         self.btn_radio_down.pack(**position)
@@ -112,6 +112,11 @@ class MainWindow(MainsWindows):
         self.hscrollbar = tk.Scrollbar(self.window, orient="horizontal", command=self.canvas.xview)
         self.hscrollbar.pack(side="bottom", fill="x")
         self.canvas.configure(xscrollcommand=self.hscrollbar.set)
+        self.canvas.bind('<Configure>', self.on_configure)
+
+
+        # Привязать событие <Configure> к функции on_configure
+
         # self.digit_data = []
         # self.digit_data_var = Variable(value=self.digit_data)
         # self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
@@ -128,6 +133,9 @@ class MainWindow(MainsWindows):
         self.digit_data_entry = Entry()
         self.digit_data_entry.pack(expand=True, padx=5, pady=5)
 
+    def on_configure(self,event):
+        # Обновить область прокрутки при изменении размера холста
+        self.canvas.configure(scrollregion=self.canvas.bbox('all'))
     def save_click(self):
 
         pass
@@ -136,7 +144,7 @@ class MainWindow(MainsWindows):
         pass
 
     def clean_click(self):
-        self.digit_data_listbox.delete(0, 'end')
+        self.canvas.delete('all')
 
     def exit_click(self):
         self.window.destroy()
@@ -158,9 +166,10 @@ class MainWindow(MainsWindows):
                     if int(self._digit_data_listbox.get(i)) > int(
                             self._digit_data_listbox.get(i + 1)):
                         # меняем местами
+                        # меняем местами
                         temp = self._digit_data_listbox.get(i)
                         self._digit_data_listbox.delete(i)
-                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
+                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i - 1))
                         self._digit_data_listbox.delete(i + 1)
                         self._digit_data_listbox.insert(i + 1, temp)
 
@@ -202,7 +211,7 @@ class MainWindow(MainsWindows):
                         # меняем местами
                         temp = self._digit_data_listbox.get(i)
                         self._digit_data_listbox.delete(i)
-                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
+                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i - 1))
                         self._digit_data_listbox.delete(i + 1)
                         self._digit_data_listbox.insert(i + 1, temp)
 

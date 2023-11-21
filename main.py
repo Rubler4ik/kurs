@@ -154,14 +154,14 @@ class MainWindow(MainsWindows):
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 
     def save_click(self):
-        filepath = filedialog.asksaveasfilename()
+        filepath = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
         if filepath != "":
             text = "\n".join(entry.get() for entry in self.entries)
             with open(filepath, "w") as file:
                 file.write(text)
 
     def open_click(self):
-        filepath = filedialog.askopenfilename()
+        filepath = filedialog.askopenfilename(filetypes=[("Текстовые файлы", "*.txt")])
         if filepath != "":
             self.clean_click()
             with open(filepath, "r") as file:

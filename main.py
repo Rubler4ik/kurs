@@ -13,15 +13,16 @@ class MainsWindows:
         self.window = Tk()
         self.window.title(title)
         self.window.iconbitmap(default=icon)
-        self.window.geometry(
-            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_reqwidth() // 2}+"
-            f"{self.window.winfo_screenheight() // 2 - self.window.winfo_reqwidth() // 2}")
         self.window.resizable(resizable, resizable)
         self.window.option_add("*tearOff", FALSE)
         if text != "":
             label = ttk.Label(self.window, text=text, justify="center", background="#FFCDD2", font="Arial,30",
                               padding=8)
             label.pack(expand=True)
+        self.window.update()
+        self.window.geometry(
+            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
+            f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
 
 class AboutWindow:
@@ -30,15 +31,16 @@ class AboutWindow:
         self._window.title(title)
         self._window["bg"] = "#FFCDD2"
         self._window.iconbitmap(default=icon)
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+"
-            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(False, False)
         self._window.about = Image.open(image).resize((160, 180))
         self._window.about_tk = ImageTk.PhotoImage(self._window.about)
         ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
         label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         label.pack(expand=True)
+        self._window.update()
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
+            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
         self._window.grab_set()
 
 
@@ -61,7 +63,7 @@ class MainWindow(MainsWindows):
         super().__init__("Программа сортировщик",
                          "",
                          TRUE)
-        self.window.geometry("550x350")  # устанавливаем размеры окна
+        #self.window.geometry("550x470")  # устанавливаем размеры окна
 
         main_menu = Menu()
         file_menu = Menu()
@@ -132,6 +134,10 @@ class MainWindow(MainsWindows):
         self.label2.pack(expand=True)
         self.digit_data_entry = Entry()
         self.digit_data_entry.pack(expand=True, padx=5, pady=5)
+        self.window.update()
+        self.window.geometry(
+            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
+            f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
     def on_configure(self,event):
         # Обновить область прокрутки при изменении размера холста
@@ -282,9 +288,6 @@ class GenerationWindow:
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_reqwidth() // 2}+"
-            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_reqwidth() // 2}")
         self._window.resizable(True, True)
         self._frame = frame
         label1 = ttk.Label(self._window,
@@ -297,6 +300,10 @@ class GenerationWindow:
         btn1 = ttk.Button(self._window, text="Генерировать",
                           command=lambda: self._generate_numbers(self._window, digit, digit_count_entry))
         btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
+        self._window.update()
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
+            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
         self._window.grab_set()
 
     def _generate_numbers(self, window, digit, digit_count_entry):

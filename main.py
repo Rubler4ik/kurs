@@ -4,6 +4,7 @@ import random
 from tkinter import Toplevel, ttk
 import tkinter as tk
 from PIL import Image, ImageTk
+from tkinter import filedialog
 import time
 
 
@@ -62,7 +63,7 @@ class MainWindow(MainsWindows):
         super().__init__("Программа сортировщик",
                          "",
                          TRUE)
-        #self.window.geometry("550x470")  # устанавливаем размеры окна
+        # self.window.geometry("550x470")  # устанавливаем размеры окна
 
         main_menu = Menu()
         file_menu = Menu()
@@ -75,11 +76,14 @@ class MainWindow(MainsWindows):
         file_menu.add_command(label="Выход", command=self.exit_click)
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [GenerationWindow(self.window, 1000, self.frame,self.entries,self.canvas)])
+                                    command=lambda: [
+                                        GenerationWindow(self.window, 1000, self.frame, self.entries, self.canvas)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [GenerationWindow(self.window, 10000, self.frame,self.entries,self.canvas)])
+                                    command=lambda: [
+                                        GenerationWindow(self.window, 10000, self.frame, self.entries, self.canvas)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [GenerationWindow(self.window, 100000, self.frame,self.entries,self.canvas)])
+                                    command=lambda: [
+                                        GenerationWindow(self.window, 100000, self.frame, self.entries, self.canvas)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -107,7 +111,7 @@ class MainWindow(MainsWindows):
         self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.result_label = ttk.Label(self.window, text="")
         self.result_label.pack()
-        self.btn1 = ttk.Button(self.window,text = "Добавить элемент", command = self.add_entry)
+        self.btn1 = ttk.Button(self.window, text="Добавить элемент", command=self.add_entry)
         self.btn1.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.btn2 = ttk.Button(self.window, text="Удалить элемент", command=self.delete_entry)
         self.btn2.pack(anchor="nw", padx=20, pady=6, fill=X)
@@ -145,19 +149,44 @@ class MainWindow(MainsWindows):
         self.frame.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-    def on_configure(self,event):
+    def on_configure(self, event):
         # Обновить область прокрутки при изменении размера холста
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
-    def save_click(self):
 
-        pass
+    def save_click(self):
+        filepath = filedialog.asksaveasfilename()
+        if filepath != "":
+            text = "\n".join(entry.get() for entry in self.entries)
+            with open(filepath, "w") as file:
+                file.write(text)
 
     def open_click(self):
-        pass
+        filepath = filedialog.askopenfilename()
+        if filepath != "":
+            self.clean_click()
+            with open(filepath, "r") as file:
+                lines = file.readlines()
+
+            # Удалить лишние поля ввода
+            while len(self.entries) > len(lines):
+                self.delete_entry()
+
+            # Добавить недостающие поля ввода
+            while len(self.entries) < len(lines):
+                self.add_entry()
+
+            # Вставить строки из файла в поля ввода
+            for i, line in enumerate(lines):
+                self.entries[i].delete(0, 'end')
+                self.entries[i].insert(0, line.strip())
+        self._rebuild_grid()
 
     def clean_click(self):
-        self.canvas.delete('all')
+        for entry in self.entries:
+            entry.destroy()
+        self.entries = []
         self.result_label.config(text="")
+        self._rebuild_grid()
 
     def exit_click(self):
         self.window.destroy()
@@ -176,7 +205,7 @@ class MainWindow(MainsWindows):
             if n == 0:
                 raise ValueError(f"Вы не добавили ни одного элемента")
         except ValueError as e:
-            showerror("Ошибка",f"Ошибка: {e}")
+            showerror("Ошибка", f"Ошибка: {e}")
 
         else:
             start_time = time.time()
@@ -237,9 +266,6 @@ class MainWindow(MainsWindows):
             self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
 
-
-
-
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
@@ -254,14 +280,14 @@ class AboutProgram(AboutWindow):
 
 
 class GenerationWindow:
-    def __init__(self, mainwindow, digit, frame, entries,canvas, icon=""):
+    def __init__(self, mainwindow, digit, frame, entries, canvas, icon=""):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
         self._window.resizable(True, True)
         self._frame = frame
         self._entries = entries
-        self._canvas=canvas
+        self._canvas = canvas
         label1 = ttk.Label(self._window,
                            text="Введите количество гинерируемых чисел: ",
                            justify="center", background="#FFCDD2", font="Arial,30", padding=8)

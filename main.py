@@ -1,4 +1,3 @@
-import tkinter
 from tkinter import *
 from tkinter.messagebox import showerror
 import random
@@ -158,6 +157,7 @@ class MainWindow(MainsWindows):
 
     def clean_click(self):
         self.canvas.delete('all')
+        self.result_label.config(text="")
 
     def exit_click(self):
         self.window.destroy()
@@ -166,63 +166,75 @@ class MainWindow(MainsWindows):
         self._data_entries = data_entries
         self._result_label = result_label
         n = len(self._data_entries)
-        start_time = time.time()
 
-        if type_sort == "upper":
-            swapped = True
-            while swapped:
-                swapped = False
-                for i in range(n - 1):
-                    a = int(self._data_entries[i].get())
-                    b = int(self._data_entries[i + 1].get())
-                    if a > b:
-                        self._data_entries[i].delete(0, 'end')
-                        self._data_entries[i].insert(0, str(b))
-                        self._data_entries[i + 1].delete(0, 'end')
-                        self._data_entries[i + 1].insert(0, str(a))
-                        swapped = True
-                if not swapped:
-                    break
-                swapped = False
-                for i in range(n - 1, 0, -1):
-                    a = int(self._data_entries[i].get())
-                    b = int(self._data_entries[i - 1].get())
-                    if a < b:
-                        self._data_entries[i].delete(0, 'end')
-                        self._data_entries[i].insert(0, str(b))
-                        self._data_entries[i - 1].delete(0, 'end')
-                        self._data_entries[i - 1].insert(0, str(a))
-                        swapped = True
+        try:
+            for i in range(n):
+                value = self._data_entries[i].get()
+                if value == '':
+                    raise ValueError(f"Значение в позиции {i} пустое")
+                int(value)
+            if n == 0:
+                raise ValueError(f"Вы не добавили ни одного элемента")
+        except ValueError as e:
+            showerror("Ошибка",f"Ошибка: {e}")
 
-        elif type_sort == "downer":
-            swapped = True
-            while swapped:
-                swapped = False
-                for i in range(n - 1):
-                    a = int(self._data_entries[i].get())
-                    b = int(self._data_entries[i + 1].get())
-                    if a < b:
-                        self._data_entries[i].delete(0, 'end')
-                        self._data_entries[i].insert(0, str(b))
-                        self._data_entries[i + 1].delete(0, 'end')
-                        self._data_entries[i + 1].insert(0, str(a))
-                        swapped = True
-                if not swapped:
-                    break
-                swapped = False
-                for i in range(n - 1, 0, -1):
-                    a = int(self._data_entries[i].get())
-                    b = int(self._data_entries[i - 1].get())
-                    if a > b:
-                        self._data_entries[i].delete(0, 'end')
-                        self._data_entries[i].insert(0, str(b))
-                        self._data_entries[i - 1].delete(0, 'end')
-                        self._data_entries[i - 1].insert(0, str(a))
-                        swapped = True
+        else:
+            start_time = time.time()
+            if type_sort == "upper":
+                swapped = True
+                while swapped:
+                    swapped = False
+                    for i in range(n - 1):
+                        a = int(self._data_entries[i].get())
+                        b = int(self._data_entries[i + 1].get())
+                        if a > b:
+                            self._data_entries[i].delete(0, 'end')
+                            self._data_entries[i].insert(0, str(b))
+                            self._data_entries[i + 1].delete(0, 'end')
+                            self._data_entries[i + 1].insert(0, str(a))
+                            swapped = True
+                    if not swapped:
+                        break
+                    swapped = False
+                    for i in range(n - 1, 0, -1):
+                        a = int(self._data_entries[i].get())
+                        b = int(self._data_entries[i - 1].get())
+                        if a < b:
+                            self._data_entries[i].delete(0, 'end')
+                            self._data_entries[i].insert(0, str(b))
+                            self._data_entries[i - 1].delete(0, 'end')
+                            self._data_entries[i - 1].insert(0, str(a))
+                            swapped = True
 
-        end_time = time.time()
-        execution_time = round((end_time - start_time), 5)
-        self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
+            elif type_sort == "downer":
+                swapped = True
+                while swapped:
+                    swapped = False
+                    for i in range(n - 1):
+                        a = int(self._data_entries[i].get())
+                        b = int(self._data_entries[i + 1].get())
+                        if a < b:
+                            self._data_entries[i].delete(0, 'end')
+                            self._data_entries[i].insert(0, str(b))
+                            self._data_entries[i + 1].delete(0, 'end')
+                            self._data_entries[i + 1].insert(0, str(a))
+                            swapped = True
+                    if not swapped:
+                        break
+                    swapped = False
+                    for i in range(n - 1, 0, -1):
+                        a = int(self._data_entries[i].get())
+                        b = int(self._data_entries[i - 1].get())
+                        if a > b:
+                            self._data_entries[i].delete(0, 'end')
+                            self._data_entries[i].insert(0, str(b))
+                            self._data_entries[i - 1].delete(0, 'end')
+                            self._data_entries[i - 1].insert(0, str(a))
+                            swapped = True
+
+            end_time = time.time()
+            execution_time = round((end_time - start_time), 5)
+            self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
 
 

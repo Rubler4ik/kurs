@@ -122,9 +122,9 @@ class MainWindow(MainsWindows):
         self.frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
 
-        self.hscrollbar = tk.Scrollbar(self.window, orient="horizontal", command=self.canvas.xview)
-        self.hscrollbar.pack(side="bottom", fill="x")
-        self.canvas.configure(xscrollcommand=self.hscrollbar.set)
+        self.HorScrollBar = tk.Scrollbar(self.window, orient="horizontal", command=self.canvas.xview)
+        self.HorScrollBar.pack(side="bottom", fill="x")
+        self.canvas.configure(xscrollcommand=self.HorScrollBar.set)
         self.canvas.bind('<Configure>', self.on_configure)
         self.window.update()
         self.window.geometry(
@@ -157,6 +157,8 @@ class MainWindow(MainsWindows):
     def save_click(self):
         filepath = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
         if filepath != "":
+            if not filepath.endswith(".txt"):
+                filepath += ".txt"
             text = "\n".join(entry.get() for entry in self.entries)
             with open(filepath, "w") as file:
                 file.write(text)
@@ -196,8 +198,8 @@ class MainWindow(MainsWindows):
         self._data_entries = data_entries
         self._result_label = result_label
         n = len(self._data_entries)
-
         try:
+
             for i in range(n):
                 value = self._data_entries[i].get()
                 if value == '':
@@ -209,6 +211,7 @@ class MainWindow(MainsWindows):
             showerror("Ошибка", f"Ошибка: {e}")
 
         else:
+            ArrayWindow(self._data_entries)
             start_time = time.time()
             if type_sort == "upper":
                 swapped = True
@@ -270,14 +273,52 @@ class MainWindow(MainsWindows):
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
-                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com",
+                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com ",
                          'materials/photo_2023-11-20_11-17-08.jpg')
 
+class ArrayWindow:
+    def __init__(self, data_entries):
+        self._window = tk.Toplevel()
+        self._window.title("Начальный массив")
+        self.canvas = tk.Canvas(self._window)
+        self.canvas.pack(side="top", fill="both", expand=True)
+
+        self.entries = []
+        self.frame = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
+
+        self.HorScrollBar = tk.Scrollbar(self._window, orient="horizontal", command=self.canvas.xview)
+        self.HorScrollBar.pack(side="bottom", fill="x")
+        self.canvas.configure(xscrollcommand=self.HorScrollBar.set)
+
+        for i in range(len(data_entries)):
+            entry = tk.Entry(self.frame)
+            entry.insert(0, data_entries[i].get())
+            entry.grid()  # Здесь используется pack
+            self.entries.append(entry)
+        self._rebuild_grid()
+
+    def _rebuild_grid(self):
+        for i, entry in enumerate(self.entries):
+            row = i % 10
+            column = i // 10
+            entry.grid(row=row, column=column, sticky="nsew")  # Здесь используется grid
+        self.frame.update_idletasks()
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
-                         "Программа сортирует числовые данные\nПри помощи метода перемешивания", 'materials/images.png')
+                         "Программа сортирует числовые данные\nПри помощи метода перемешивания"
+                         "\nЭта программа использует алгоритм сортировки перемешиванием\n "
+                         "(или коктейльной сортировки), который является вариацией пузырьковой сортировки.\n "
+                         "Он проходит через список элементов в обоих направлениях, сначала слева направо,\n"
+                         " а затем справа налево, сравнивая пары соседних элементов и меняя их местами,\n "
+                         "если они расположены в неправильном порядке. Это продолжается до тех пор,\n "
+                         "пока не будет выполнен проход, в котором не требуется никаких обменов, "
+                         "что указывает на то,\n что список отсортирован. Этот алгоритм"
+                         " эффективен для списков, которые уже частично отсортированы.",
+                         'materials/images.png')
 
 
 class GenerationWindow:

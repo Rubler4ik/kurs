@@ -51,6 +51,7 @@ class StartWindow(MainsWindows):
                          "\nСортировка числовых данных методом перемешивания",
                          FALSE)
         self.window.after(3000, self.close_start_window)
+        self.main_window = None
 
     def close_start_window(self):
         self.window.destroy()
@@ -63,8 +64,13 @@ class MainWindow(MainsWindows):
         super().__init__("Программа сортировщик",
                          "",
                          TRUE)
-        # self.window.geometry("550x470")  # устанавливаем размеры окна
-
+        self._data_entries = None
+        self._result_label = None
+        upper = "upper"
+        downer = "downer"
+        self.row = 0
+        self.column = 0
+        self.entries = []
         main_menu = Menu()
         file_menu = Menu()
         about = Menu()
@@ -95,11 +101,6 @@ class MainWindow(MainsWindows):
 
         self.window.config(menu=main_menu)
 
-        upper = "upper"
-        downer = "downer"
-        self.row = 0
-        self.column = 0
-        self.entries = []
         self.Sort = StringVar(value=upper)
         position = {"padx": 6, "pady": 6, "anchor": CENTER}
         self.btn_radio_up = ttk.Radiobutton(self.window, text="По возрастанию", value=upper, variable=self.Sort)
@@ -149,7 +150,7 @@ class MainWindow(MainsWindows):
         self.frame.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-    def on_configure(self, event):
+    def on_configure(self, _):
         # Обновить область прокрутки при изменении размера холста
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 

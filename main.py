@@ -76,11 +76,11 @@ class MainWindow(MainsWindows):
         file_menu.add_command(label="Выход", command=self.exit_click)
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [GenerationWindow(self.window, 1000, self.frame)])
+                                    command=lambda: [GenerationWindow(self.window, 1000, self.frame,self.entries,self.canvas)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [GenerationWindow(self.window, 10000, self.frame)])
+                                    command=lambda: [GenerationWindow(self.window, 10000, self.frame,self.entries,self.canvas)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [GenerationWindow(self.window, 100000, self.frame)])
+                                    command=lambda: [GenerationWindow(self.window, 100000, self.frame,self.entries,self.canvas)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -91,20 +91,27 @@ class MainWindow(MainsWindows):
         main_menu.add_cascade(label="Справка", menu=about)
 
         self.window.config(menu=main_menu)
+
         upper = "upper"
         downer = "downer"
+        self.row = 0
+        self.column = 0
+        self.entries = []
         self.Sort = StringVar(value=upper)
         position = {"padx": 6, "pady": 6, "anchor": CENTER}
         self.btn_radio_up = ttk.Radiobutton(self.window, text="По возрастанию", value=upper, variable=self.Sort)
         self.btn_radio_up.pack(**position)
         self.btn_radio_down = ttk.Radiobutton(self.window, text="По убыванию", value=downer, variable=self.Sort)
         self.btn_radio_down.pack(**position)
-
         self.btn = ttk.Button(self.window, text="Сортировать",
-                              command=lambda: self.sort(self.digit_data_listbox, self.Sort.get(), self.result_label))
+                              command=lambda: self.sort(self.entries, self.Sort.get(), self.result_label))
         self.btn.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.result_label = ttk.Label(self.window, text="")
         self.result_label.pack()
+        self.btn1 = ttk.Button(self.window,text = "Добавить элемент", command = self.add_entry)
+        self.btn1.pack(anchor="nw", padx=20, pady=6, fill=X)
+        self.btn2 = ttk.Button(self.window, text="Удалить элемент", command=self.delete_entry)
+        self.btn2.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.canvas = tk.Canvas(self.window)
         self.canvas.pack(side="top", fill="both", expand=True)
 
@@ -115,29 +122,29 @@ class MainWindow(MainsWindows):
         self.hscrollbar.pack(side="bottom", fill="x")
         self.canvas.configure(xscrollcommand=self.hscrollbar.set)
         self.canvas.bind('<Configure>', self.on_configure)
-
-
-        # Привязать событие <Configure> к функции on_configure
-
-        # self.digit_data = []
-        # self.digit_data_var = Variable(value=self.digit_data)
-        # self.digit_data_listbox = Listbox(listvariable=self.digit_data_var)
-        # self.digit_data_listbox.pack(expand=True, fill=BOTH, padx=5, pady=5)
-
-        # привязываем событие двойного щелчка к listbox
-        # self.digit_data_listbox.bind("<Double-Button-1>", self.change_item)
-
-        # создаем поле ввода для нового текста
-        self.label2 = ttk.Label(self.window,
-                                text="Введите значение на которое нужно поменять, "
-                                     "после чего дважды кликните на нужный элемент:")
-        self.label2.pack(expand=True)
-        self.digit_data_entry = Entry()
-        self.digit_data_entry.pack(expand=True, padx=5, pady=5)
         self.window.update()
         self.window.geometry(
             f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
+
+    def add_entry(self):
+        entry = tk.Entry(self.frame)
+        self.entries.append(entry)
+        self._rebuild_grid()
+
+    def delete_entry(self):
+        if self.entries:
+            entry = self.entries.pop()
+            entry.destroy()
+            self._rebuild_grid()
+
+    def _rebuild_grid(self):
+        for i, entry in enumerate(self.entries):
+            row = i % 10
+            column = i // 10
+            entry.grid(row=row, column=column, sticky="nsew")
+        self.frame.update_idletasks()
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def on_configure(self,event):
         # Обновить область прокрутки при изменении размера холста
@@ -155,119 +162,70 @@ class MainWindow(MainsWindows):
     def exit_click(self):
         self.window.destroy()
 
-    def sort(self, digit_data_listbox, type_sort, result_label):
-        self._digit_data_listbox = digit_data_listbox
+    def sort(self, data_entries, type_sort, result_label):
+        self._data_entries = data_entries
         self._result_label = result_label
+        n = len(self._data_entries)
+        start_time = time.time()
+
         if type_sort == "upper":
-            n = self._digit_data_listbox.size()
             swapped = True
-            start = 0
-            end = n - 1
-            start_time = time.time()
             while swapped:
                 swapped = False
-
-                # проходим слева направо
-                for i in range(start, end):
-                    if int(self._digit_data_listbox.get(i)) > int(
-                            self._digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        # меняем местами
-                        temp = self._digit_data_listbox.get(i)
-                        self._digit_data_listbox.delete(i)
-                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i - 1))
-                        self._digit_data_listbox.delete(i + 1)
-                        self._digit_data_listbox.insert(i + 1, temp)
-
+                for i in range(n - 1):
+                    a = int(self._data_entries[i].get())
+                    b = int(self._data_entries[i + 1].get())
+                    if a > b:
+                        self._data_entries[i].delete(0, 'end')
+                        self._data_entries[i].insert(0, str(b))
+                        self._data_entries[i + 1].delete(0, 'end')
+                        self._data_entries[i + 1].insert(0, str(a))
                         swapped = True
-
-                # если не было обмена, список отсортирован
                 if not swapped:
                     break
-
                 swapped = False
-
-                # уменьшаем конец на один, так как последний элемент уже на своем месте
-                end -= 1
-
-                # проходим справа налево
-                for i in range(end - 1, start - 1, -1):
-                    if int(self._digit_data_listbox.get(i)) > int(
-                            self._digit_data_listbox.get(i + 1)):
+                for i in range(n - 1, 0, -1):
+                    a = int(self._data_entries[i].get())
+                    b = int(self._data_entries[i - 1].get())
+                    if a < b:
+                        self._data_entries[i].delete(0, 'end')
+                        self._data_entries[i].insert(0, str(b))
+                        self._data_entries[i - 1].delete(0, 'end')
+                        self._data_entries[i - 1].insert(0, str(a))
                         swapped = True
 
-                # увеличиваем начало, так как следующий первый элемент уже отсортирован
-                start += 1
-            end_time = time.time()
-
-        if type_sort == "downer":
-            n = self._digit_data_listbox.size()
+        elif type_sort == "downer":
             swapped = True
-            start = 0
-            end = n - 1
-            start_time = time.time()
-
             while swapped:
                 swapped = False
-
-                # проходим слева направо
-                for i in range(start, end):
-                    if int(self._digit_data_listbox.get(i)) < int(
-                            self._digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self._digit_data_listbox.get(i)
-                        self._digit_data_listbox.delete(i)
-                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i - 1))
-                        self._digit_data_listbox.delete(i + 1)
-                        self._digit_data_listbox.insert(i + 1, temp)
-
+                for i in range(n - 1):
+                    a = int(self._data_entries[i].get())
+                    b = int(self._data_entries[i + 1].get())
+                    if a < b:
+                        self._data_entries[i].delete(0, 'end')
+                        self._data_entries[i].insert(0, str(b))
+                        self._data_entries[i + 1].delete(0, 'end')
+                        self._data_entries[i + 1].insert(0, str(a))
                         swapped = True
-
-                # если не было обмена, список отсортирован
                 if not swapped:
                     break
-
                 swapped = False
-
-                # уменьшаем конец на один, так как последний элемент уже на своем месте
-                end -= 1
-
-                # проходим справа налево
-                for i in range(end - 1, start - 1, -1):
-                    if int(self._digit_data_listbox.get(i)) < int(self._digit_data_listbox.get(i + 1)):
-                        # меняем местами
-                        temp = self._digit_data_listbox.get(i)
-                        self._digit_data_listbox.delete(i)
-                        self._digit_data_listbox.insert(i, self._digit_data_listbox.get(i))
-                        self._digit_data_listbox.delete(i + 1)
-                        self._digit_data_listbox.insert(i + 1, temp)
-
+                for i in range(n - 1, 0, -1):
+                    a = int(self._data_entries[i].get())
+                    b = int(self._data_entries[i - 1].get())
+                    if a > b:
+                        self._data_entries[i].delete(0, 'end')
+                        self._data_entries[i].insert(0, str(b))
+                        self._data_entries[i - 1].delete(0, 'end')
+                        self._data_entries[i - 1].insert(0, str(a))
                         swapped = True
 
-                # увеличиваем начало, так как следующий первый элемент уже отсортирован
-                start += 1
-                end_time = time.time()
+        end_time = time.time()
         execution_time = round((end_time - start_time), 5)
         self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
-    def change_item(self, event):
-        try:
-            # получаем индекс выделенного элемента
-            index = self.digit_data_listbox.curselection()[0]
-            # получаем новый текст из поля ввода
 
-        except IndexError:
-            showerror("Ошибка", "Вы промахнулись, попробуйте снова!")
 
-        else:
-            try:
-                new_digit = int(self.digit_data_entry.get())
-            except ValueError:
-                showerror("Ошибка", "Вы ввели не верное значение")
-            else:
-                # заменяем элемент по индексу на новый текст
-                self.digit_data_listbox.delete(index)
-                self.digit_data_listbox.insert(index, new_digit)
 
 
 class AboutAuthor(AboutWindow):
@@ -284,12 +242,14 @@ class AboutProgram(AboutWindow):
 
 
 class GenerationWindow:
-    def __init__(self, mainwindow, digit, frame, icon=""):
+    def __init__(self, mainwindow, digit, frame, entries,canvas, icon=""):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
         self._window.resizable(True, True)
         self._frame = frame
+        self._entries = entries
+        self._canvas=canvas
         label1 = ttk.Label(self._window,
                            text="Введите количество гинерируемых чисел: ",
                            justify="center", background="#FFCDD2", font="Arial,30", padding=8)
@@ -318,7 +278,12 @@ class GenerationWindow:
     def _generation(self, digit, digit_count):
         for i in range(digit_count):  # Пример: 33 элемента
             random_digit = random.randint(0, digit)
-            tk.Label(self._frame, text=f"{random_digit}").grid(row=i % 10, column=i // 10, sticky="nsew")
+            entry = tk.Entry(self._frame)
+            entry.insert(0, f"{random_digit}")
+            entry.grid(row=i % 10, column=i // 10, sticky="nsew")
+            self._entries.append(entry)
+        self._frame.update_idletasks()
+        self._canvas.configure(scrollregion=self._canvas.bbox("all"))
 
 
 start_window = StartWindow()

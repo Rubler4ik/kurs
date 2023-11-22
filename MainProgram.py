@@ -1,64 +1,15 @@
 from tkinter import *
 from tkinter.messagebox import showerror
-import random
-from tkinter import Toplevel, ttk
+
+from tkinter import ttk
 import tkinter as tk
-from PIL import Image, ImageTk
+
 from tkinter import filedialog
 import time
-
-
-class MainsWindows:
-    def __init__(self, title, text, resizable, icon="materials/sort-2_icon-icons.com_69583.ico"):
-        self.window = Tk()
-        self.window.title(title)
-        self.window.iconbitmap(default=icon)
-        self.window.resizable(resizable, resizable)
-        self.window.option_add("*tearOff", FALSE)
-        if text != "":
-            label = ttk.Label(self.window, text=text, justify="center", background="#FFCDD2", font="Arial,30",
-                              padding=8)
-            label.pack(expand=True)
-        self.window.update()
-        self.window.geometry(
-            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
-            f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
-
-
-class AboutWindow:
-    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
-        self._window = Toplevel(mainwindow)
-        self._window.title(title)
-        self._window["bg"] = "#FFCDD2"
-        self._window.iconbitmap(default=icon)
-        self._window.resizable(False, False)
-        self._window.about = Image.open(image).resize((160, 180))
-        self._window.about_tk = ImageTk.PhotoImage(self._window.about)
-        ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
-        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
-        label.pack(expand=True)
-        self._window.update()
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
-            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
-        self._window.grab_set()
-
-
-class StartWindow(MainsWindows):
-    def __init__(self):
-        super().__init__("Программа сортировщик",
-                         "Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:"
-                         "\nСортировка числовых данных методом перемешивания",
-                         FALSE)
-        self.window.after(3000, self.close_start_window)
-        self.main_window = None
-
-    def close_start_window(self):
-        self.window.destroy()
-        self.main_window = MainWindow()
-        self.main_window.window.mainloop()
-
-
+from AboutWindow import AboutAuthor, AboutProgram
+from GenerateWindow import GenerationWindow
+from MainWindow import MainsWindows
+from ArrayWindow import ArrayWindow
 class MainWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик",
@@ -117,7 +68,7 @@ class MainWindow(MainsWindows):
         self.btn2 = ttk.Button(self.window, text="Удалить элемент", command=self.delete_entry)
         self.btn2.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.canvas = tk.Canvas(self.window)
-        self.canvas.pack(side="top", fill="both",padx=20, pady=6, expand=True)
+        self.canvas.pack(side="top", fill="both", padx=20, pady=6, expand=True)
 
         self.frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
@@ -269,101 +220,21 @@ class MainWindow(MainsWindows):
             execution_time = round((end_time - start_time), 5)
             self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
+class StartWindow(MainsWindows):
+    def __init__(self):
+        super().__init__("Программа сортировщик",
+                         "Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:"
+                         "\nСортировка числовых данных методом перемешивания",
+                         FALSE)
+        self.window.after(3000, self.close_start_window)
+        self.main_window = None
 
-class AboutAuthor(AboutWindow):
-    def __init__(self, mainwindow):
-        super().__init__(mainwindow, "Сведения об авторе",
-                         "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com ",
-                         'materials/photo_2023-11-20_11-17-08.jpg')
-
-class ArrayWindow:
-    def __init__(self, data_entries):
-        self._window = tk.Toplevel()
-        self._window.title("Начальный массив")
-        self.canvas = tk.Canvas(self._window)
-        self.canvas.pack(side="top", fill="both", expand=True)
-
-        self.entries = []
-        self.frame = tk.Frame(self.canvas)
-        self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
-
-        self.HorScrollBar = tk.Scrollbar(self._window, orient="horizontal", command=self.canvas.xview)
-        self.HorScrollBar.pack(side="bottom", fill="x")
-        self.canvas.configure(xscrollcommand=self.HorScrollBar.set)
-
-        for i in range(len(data_entries)):
-            entry = tk.Entry(self.frame)
-            entry.insert(0, data_entries[i].get())
-            entry.grid()  # Здесь используется pack
-            self.entries.append(entry)
-        self._rebuild_grid()
-
-    def _rebuild_grid(self):
-        for i, entry in enumerate(self.entries):
-            row = i % 10
-            column = i // 10
-            entry.grid(row=row, column=column, sticky="nsew")  # Здесь используется grid
-        self.frame.update_idletasks()
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-
-class AboutProgram(AboutWindow):
-    def __init__(self, mainwindow):
-        super().__init__(mainwindow, "О программе: Сортировщик",
-                         "Программа сортирует числовые данные\nПри помощи метода перемешивания"
-                         "\nЭта программа использует алгоритм сортировки перемешиванием\n "
-                         "(или коктейльной сортировки), который является вариацией пузырьковой сортировки.\n "
-                         "Он проходит через список элементов в обоих направлениях, сначала слева направо,\n"
-                         " а затем справа налево, сравнивая пары соседних элементов и меняя их местами,\n "
-                         "если они расположены в неправильном порядке. Это продолжается до тех пор,\n "
-                         "пока не будет выполнен проход, в котором не требуется никаких обменов, "
-                         "что указывает на то,\n что список отсортирован. Этот алгоритм"
-                         " эффективен для списков, которые уже частично отсортированы.",
-                         'materials/images.png')
+    def close_start_window(self):
+        self.window.destroy()
+        self.main_window = MainWindow()
+        self.main_window.window.mainloop()
 
 
-class GenerationWindow:
-    def __init__(self, mainwindow, digit, frame, entries, canvas, icon=""):
-        self._window = Toplevel(mainwindow)
-        self._window.title("Генератор чисел")
-        self._window.iconbitmap(default=icon)
-        self._window.resizable(True, True)
-        self._frame = frame
-        self._entries = entries
-        self._canvas = canvas
-        label1 = ttk.Label(self._window,
-                           text="Введите количество гинерируемых чисел: ",
-                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
-        label1.pack(expand=True)
-        digit_count_entry = Entry(self._window)
-        digit_count_entry.pack(padx=5, pady=5)
-
-        btn1 = ttk.Button(self._window, text="Генерировать",
-                          command=lambda: self._generate_numbers(self._window, digit, digit_count_entry))
-        btn1.pack(anchor="nw", padx=20, pady=30, fill=X)
-        self._window.update()
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
-            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
-        self._window.grab_set()
-
-    def _generate_numbers(self, window, digit, digit_count_entry):
-        try:
-            digit_count = int(digit_count_entry.get())
-        except ValueError:
-            showerror(title="Ошибка", message="Введено недопустимое значение. Пожалуйста, введите число.")
-        else:
-            self._generation(digit, digit_count)
-            window.destroy()
-
-    def _generation(self, digit, digit_count):
-        for i in range(digit_count):  # Пример: 33 элемента
-            random_digit = random.randint(0, digit)
-            entry = tk.Entry(self._frame)
-            entry.insert(0, f"{random_digit}")
-            entry.grid(row=i % 10, column=i // 10, sticky="nsew")
-            self._entries.append(entry)
-        self._frame.update_idletasks()
-        self._canvas.configure(scrollregion=self._canvas.bbox("all"))
 
 
 start_window = StartWindow()

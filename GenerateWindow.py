@@ -3,6 +3,8 @@ from tkinter import ttk
 from tkinter import *
 from tkinter.messagebox import showerror
 import tkinter as tk
+
+
 class GenerationWindow:
     def __init__(self, mainwindow, digit, frame, entries, canvas, icon=""):
         self._window = Toplevel(mainwindow)

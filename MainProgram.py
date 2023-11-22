@@ -10,6 +10,8 @@ from AboutWindow import AboutAuthor, AboutProgram
 from GenerateWindow import GenerationWindow
 from MainWindow import MainsWindows
 from ArrayWindow import ArrayWindow
+
+
 class MainWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик",
@@ -220,6 +222,7 @@ class MainWindow(MainsWindows):
             execution_time = round((end_time - start_time), 5)
             self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")
 
+
 class StartWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик",
@@ -233,8 +236,6 @@ class StartWindow(MainsWindows):
         self.window.destroy()
         self.main_window = MainWindow()
         self.main_window.window.mainloop()
-
-
 
 
 start_window = StartWindow()

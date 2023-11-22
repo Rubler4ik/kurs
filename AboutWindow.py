@@ -1,5 +1,7 @@
 from tkinter import Toplevel, ttk
 from PIL import Image, ImageTk
+
+
 class AboutWindow:
     def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
@@ -18,11 +20,13 @@ class AboutWindow:
             f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
         self._window.grab_set()
 
+
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "Сведения об авторе",
                          "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com ",
                          'materials/photo_2023-11-20_11-17-08.jpg')
+
 
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):

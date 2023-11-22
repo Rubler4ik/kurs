@@ -1,5 +1,6 @@
-
 import tkinter as tk
+
+
 class ArrayWindow:
     def __init__(self, data_entries):
         self._window = tk.Toplevel()

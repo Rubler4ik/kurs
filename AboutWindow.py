@@ -1,4 +1,4 @@
-from tkinter import Toplevel, ttk
+from tkinter import Toplevel, ttk,LEFT
 from PIL import Image, ImageTk
 
 
@@ -9,15 +9,12 @@ class AboutWindow:
         self._window["bg"] = "#FFCDD2"
         self._window.iconbitmap(default=icon)
         self._window.resizable(False, False)
-        self._window.about = Image.open(image).resize((160, 180))
+        self._window.about = Image.open(image).resize((200, 220))
         self._window.about_tk = ImageTk.PhotoImage(self._window.about)
-        ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
-        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font=('Arial',13), padding=8)
-        label.pack(expand=True)
-        self._window.update()
-        self._window.geometry(
-            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
-            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
+        self.label_image=ttk.Label(self._window, image=self._window.about_tk)
+        self.label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font=('Arial',13), padding=8)
+
+
         self._window.grab_set()
 
 
@@ -26,6 +23,12 @@ class AboutAuthor(AboutWindow):
         super().__init__(mainwindow, "Сведения об авторе",
                          "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com ",
                          'materials/photo_2023-11-20_11-17-08.jpg')
+        self.label_image.pack(anchor="n")
+        self.label.pack(expand=True)
+        self._window.update()
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
+            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
 
 
 class AboutProgram(AboutWindow):
@@ -41,3 +44,9 @@ class AboutProgram(AboutWindow):
                          "что указывает на то,\n что список отсортирован. Этот алгоритм"
                          " эффективен для списков, которые уже частично отсортированы.",
                          'materials/images.png')
+        self.label_image.pack(side=LEFT)
+        self.label.pack(expand=True)
+        self._window.update()
+        self._window.geometry(
+            f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
+            f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")

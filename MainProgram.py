@@ -15,7 +15,7 @@ from ArrayWindow import ArrayWindow
 class MainWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик",
-                         "", "", "",
+                         "", "", "","","","","","",
                          TRUE)
         self._data_entries = None
         self._result_label = None
@@ -227,13 +227,18 @@ class StartWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик", "Белорусский Национальный"
                                                   " технический университет",
-                         "Факультет инормационных технологий и"
+                         "Факультет информационных технологий и"
                          " робототехники\nКафедра программного"
                          " обеспечиния информационных систем и технологий",
-                         "Курсовой проект\nСтедента: Гришко Д.И.\nПо теме:"
-                         "\nСортировка числовых данных методом перемешивания",
-                         FALSE)
-        self.window.after(3000, self.close_start_window)
+                         "Курсовая работа",
+                         "по дисциплине языки программирования",
+                         "Сортировка числовых данных методом перемешивания",
+                         "Выполнил: Cтудент группы 10701222\nГришко Дмитрий Игоревич\n\n\nПреподаватель:к.ф-м.н.,доц."
+                         "\nСидорик Валерий Владимирович",
+                         'materials/OIG.4r2eWaC.png',
+                         "Минск, 2023",
+                         TRUE)
+        self.window.after(5000, self.close_start_window)
         self.main_window = None
 
     def close_start_window(self):

@@ -12,7 +12,7 @@ class AboutWindow:
         self._window.about = Image.open(image).resize((160, 180))
         self._window.about_tk = ImageTk.PhotoImage(self._window.about)
         ttk.Label(self._window, image=self._window.about_tk).pack(side='left')
-        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+        label = ttk.Label(self._window, text=text, justify="center", background="#FFCDD2", font=('Arial',13), padding=8)
         label.pack(expand=True)
         self._window.update()
         self._window.geometry(

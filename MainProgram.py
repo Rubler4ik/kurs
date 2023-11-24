@@ -237,7 +237,7 @@ class StartWindow(MainsWindows):
                          "\nСидорик Валерий Владимирович",
                          'materials/OIG.4r2eWaC.png',
                          "Минск, 2023",
-                         TRUE)
+                            FALSE)
         self.window.after(5000, self.close_start_window)
         self.main_window = None
 

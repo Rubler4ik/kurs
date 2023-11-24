@@ -69,7 +69,7 @@ class MainWindow(MainsWindows):
         self.btn1.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.btn2 = ttk.Button(self.window, text="Удалить элемент", command=self.delete_entry)
         self.btn2.pack(anchor="nw", padx=20, pady=6, fill=X)
-        self.canvas = tk.Canvas(self.window)
+        self.canvas = tk.Canvas(self.window,height=240)
         self.canvas.pack(side="top", fill="both", padx=20, pady=6, expand=True)
 
         self.frame = tk.Frame(self.canvas)

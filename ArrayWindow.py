@@ -19,7 +19,7 @@ class ArrayWindow:
         for i in range(len(data_entries)):
             entry = tk.Entry(self.frame)
             entry.insert(0, data_entries[i].get())
-            entry.grid()  # Здесь используется pack
+            entry.grid()
             self.entries.append(entry)
         self._rebuild_grid()
 
@@ -27,6 +27,6 @@ class ArrayWindow:
         for i, entry in enumerate(self.entries):
             row = i % 10
             column = i // 10
-            entry.grid(row=row, column=column, sticky="nsew")  # Здесь используется grid
+            entry.grid(row=row, column=column, sticky="nsew")
         self.frame.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))

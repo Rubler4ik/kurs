@@ -20,7 +20,7 @@ class MainsWindows:
                       padding=3).pack(anchor="n")
 
             ttk.Label(self.window, text=text2, font=('Arial Black', 9), justify="center", background="#FFCDD2",
-                      padding=0).pack(anchor="center")
+                      padding=0).pack(anchor="center",padx=6)
 
             ttk.Label(self.window, text=text3, justify="center", background="#FFCDD2",
                       font=('Arial Black', 10),

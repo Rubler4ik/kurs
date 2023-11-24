@@ -23,6 +23,7 @@ class ArrayWindow:
             self.entries.append(entry)
         self._rebuild_grid()
 
+
     def _rebuild_grid(self):
         for i, entry in enumerate(self.entries):
             row = i % 10

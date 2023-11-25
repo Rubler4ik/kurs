@@ -15,7 +15,7 @@ from modules.array_window import ArrayWindow
 class MainWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик",
-                         "", "", "","","","","","",
+                         "", "", "", "", "", "", "", "",
                          TRUE)
         self._data_entries = None
         self._result_label = None
@@ -36,13 +36,16 @@ class MainWindow(MainsWindows):
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
                                     command=lambda: [
-                                        GenerationWindow(self.window, 1000, self.frame, self.entries, self.canvas)])
+                                        GenerationWindow(self.window, 1000, self.frame, self.entries, self.canvas),
+                                        self.rebuild_grid()])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
                                     command=lambda: [
-                                        GenerationWindow(self.window, 10000, self.frame, self.entries, self.canvas)])
+                                        GenerationWindow(self.window, 10000, self.frame, self.entries, self.canvas),
+                                        self.rebuild_grid()])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
                                     command=lambda: [
-                                        GenerationWindow(self.window, 100000, self.frame, self.entries, self.canvas)])
+                                        GenerationWindow(self.window, 100000, self.frame, self.entries, self.canvas),
+                                        self.rebuild_grid()])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -69,7 +72,7 @@ class MainWindow(MainsWindows):
         self.btn1.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.btn2 = ttk.Button(self.window, text="Удалить элемент", command=self.delete_entry)
         self.btn2.pack(anchor="nw", padx=20, pady=6, fill=X)
-        self.canvas = tk.Canvas(self.window,height=240)
+        self.canvas = tk.Canvas(self.window, height=240)
         self.canvas.pack(side="top", fill="both", padx=20, pady=6, expand=True)
 
         self.frame = tk.Frame(self.canvas)
@@ -87,15 +90,15 @@ class MainWindow(MainsWindows):
     def add_entry(self):
         entry = tk.Entry(self.frame)
         self.entries.append(entry)
-        self._rebuild_grid()
+        self.rebuild_grid()
 
     def delete_entry(self):
         if self.entries:
             entry = self.entries.pop()
             entry.destroy()
-            self._rebuild_grid()
+            self.rebuild_grid()
 
-    def _rebuild_grid(self):
+    def rebuild_grid(self):
         for i, entry in enumerate(self.entries):
             row = i % 10
             column = i // 10
@@ -135,14 +138,14 @@ class MainWindow(MainsWindows):
             for i, line in enumerate(lines):
                 self.entries[i].delete(0, 'end')
                 self.entries[i].insert(0, line.strip())
-        self._rebuild_grid()
+        self.rebuild_grid()
 
     def clean_click(self):
         for entry in self.entries:
             entry.destroy()
         self.entries = []
         self.result_label.config(text="")
-        self._rebuild_grid()
+        self.rebuild_grid()
 
     def exit_click(self):
         self.window.destroy()
@@ -237,7 +240,7 @@ class StartWindow(MainsWindows):
                          "\nСидорик Валерий Владимирович",
                          'materials/OIG.4r2eWaC.png',
                          "Минск, 2023",
-                            FALSE)
+                         FALSE)
         self.window.after(5000, self.close_start_window)
         self.main_window = None
 

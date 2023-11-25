@@ -6,10 +6,10 @@ import tkinter as tk
 
 from tkinter import filedialog
 import time
-from AboutWindow import AboutAuthor, AboutProgram
-from GenerateWindow import GenerationWindow
-from MainWindow import MainsWindows
-from ArrayWindow import ArrayWindow
+from modules.about_windows import AboutAuthor, AboutProgram
+from modules.generate_window import GenerationWindow
+from modules.main_windows import MainsWindows
+from modules.array_window import ArrayWindow
 
 
 class MainWindow(MainsWindows):

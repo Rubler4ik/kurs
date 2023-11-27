@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter.messagebox import showerror
+from tkinter.messagebox import showerror, askyesnocancel
 
 from tkinter import ttk
 import tkinter as tk
@@ -24,11 +24,13 @@ class MainWindow(MainsWindows):
         self.row = 0
         self.column = 0
         self.entries = []
+        self.current_file = None
         main_menu = Menu()
         file_menu = Menu()
         about = Menu()
         generation_menu = Menu()
         file_menu.add_command(label="Сохранить", command=self.save_click)
+        file_menu.add_command(label="Сохранить как", command=self.save_how_click)
         file_menu.add_command(label="Открыть", command=self.open_click)
         file_menu.add_command(label="Очистить", command=self.clean_click)
         file_menu.add_separator()
@@ -111,12 +113,23 @@ class MainWindow(MainsWindows):
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 
     def save_click(self):
-        filepath = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
-        if filepath != "":
-            if not filepath.endswith(".txt"):
-                filepath += ".txt"
+        if self.current_file is None:
+            self.current_file = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
+            if not self.current_file.endswith(".txt"):
+                self.current_file += ".txt"
+
+        if self.current_file != "":
             text = "\n".join(entry.get() for entry in self.entries)
-            with open(filepath, "w") as file:
+            with open(self.current_file, "w") as file:
+                file.write(text)
+
+    def save_how_click(self):
+        self.current_file = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
+        if self.current_file != "":
+            if not self.current_file.endswith(".txt"):
+                self.current_file += ".txt"
+            text = "\n".join(entry.get() for entry in self.entries)
+            with open(self.current_file, "w") as file:
                 file.write(text)
 
     def open_click(self):
@@ -151,11 +164,30 @@ class MainWindow(MainsWindows):
             self.rebuild_grid()
 
     def clean_click(self):
-        for entry in self.entries:
-            entry.destroy()
-        self.entries = []
-        self.result_label.config(text="")
-        self.rebuild_grid()
+        if self.current_file is None:
+            if self.entries:
+                result = askyesnocancel(title="Вы не сохранили файл", message="Вы хотите сохранить этот файл?")
+                if result:
+                    self.save_click()
+                elif result is None:  # Если пользователь нажал "Отмена"
+                    return  # Прервать выполнение функции
+                else:  # Если пользователь нажал "Нет"
+                    for entry in self.entries:
+                        entry.destroy()
+                    self.entries = []
+                    self.result_label.config(text="")
+            else:
+                for entry in self.entries:
+                    entry.destroy()
+                self.entries = []
+                self.result_label.config(text="")
+        else:
+            for entry in self.entries:
+                entry.destroy()
+            self.entries = []
+            self.result_label.config(text="")
+            self.current_file = None
+            self.rebuild_grid()
 
     def exit_click(self):
         self.window.destroy()

@@ -84,7 +84,9 @@ class MainWindow(MainsWindows):
     def generation(self, digit):
         def on_generation_window_close():
             self.rebuild_grid()
+
         GenerationWindow(self.window, digit, self.frame, self.entries, self.canvas, on_generation_window_close)
+
     def add_entry(self):
         entry = tk.Entry(self.frame)
         self.entries.append(entry)
@@ -175,7 +177,7 @@ class MainWindow(MainsWindows):
             showerror("Ошибка", f"Ошибка: {e}")
 
         else:
-            ArrayWindow(self.window, self._data_entries,self.rebuild_grid)
+            ArrayWindow(self.window, self._data_entries, self.rebuild_grid)
             start_time = time.time()
             if type_sort == "upper":
                 swapped = True

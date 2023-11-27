@@ -51,5 +51,3 @@ class GenerationWindow:
         self._window.destroy()
         if self.on_close:
             self.on_close()
-
-

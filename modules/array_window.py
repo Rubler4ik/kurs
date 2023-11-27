@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import *
 
 
-
 class ArrayWindow:
     def __init__(self, mainwindow, data_entries, rebuild_grid):
         self._window = Toplevel(mainwindow)

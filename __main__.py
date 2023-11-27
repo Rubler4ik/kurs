@@ -84,7 +84,6 @@ class MainWindow(MainsWindows):
     def generation(self, digit):
         def on_generation_window_close():
             self.rebuild_grid()
-
         GenerationWindow(self.window, digit, self.frame, self.entries, self.canvas, on_generation_window_close)
     def add_entry(self):
         entry = tk.Entry(self.frame)

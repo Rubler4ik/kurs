@@ -165,7 +165,7 @@ class MainWindow(MainsWindows):
             showerror("Ошибка", f"Ошибка: {e}")
 
         else:
-            ArrayWindow(self._data_entries)
+            ArrayWindow(self.window, self._data_entries,self.rebuild_grid)
             start_time = time.time()
             if type_sort == "upper":
                 swapped = True

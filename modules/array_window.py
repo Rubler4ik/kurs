@@ -1,9 +1,13 @@
 import tkinter as tk
+from tkinter import *
+
 
 
 class ArrayWindow:
-    def __init__(self, data_entries):
-        self._window = tk.Toplevel()
+    def __init__(self, mainwindow, data_entries, rebuild_grid):
+        self._window = Toplevel(mainwindow)
+        self.mainwindow = mainwindow
+        self.rebuild_grid = rebuild_grid
         self._window.title("Начальный массив")
         self.canvas = tk.Canvas(self._window)
         self.canvas.pack(side="top", fill="both", expand=True)
@@ -21,13 +25,4 @@ class ArrayWindow:
             entry.insert(0, data_entries[i].get())
             entry.grid()
             self.entries.append(entry)
-        self._rebuild_grid()
-
-
-    def _rebuild_grid(self):
-        for i, entry in enumerate(self.entries):
-            row = i % 10
-            column = i // 10
-            entry.grid(row=row, column=column, sticky="nsew")
-        self.frame.update_idletasks()
-        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+        self.rebuild_grid()

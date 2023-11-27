@@ -124,19 +124,29 @@ class MainWindow(MainsWindows):
             with open(filepath, "r") as file:
                 lines = file.readlines()
 
+            # Отключить обновление интерфейса
+            self.window.update_idletasks()
+            self.window.after_idle(self.window.update_idletasks)
+
             # Удалить лишние поля ввода
             while len(self.entries) > len(lines):
-                self.delete_entry()
+                self.entries[-1].grid_forget()
+                self.entries.pop()
 
             # Добавить недостающие поля ввода
             while len(self.entries) < len(lines):
-                self.add_entry()
+                entry = tk.Entry(self.frame)
+                entry.grid()
+                self.entries.append(entry)
 
             # Вставить строки из файла в поля ввода
             for i, line in enumerate(lines):
                 self.entries[i].delete(0, 'end')
                 self.entries[i].insert(0, line.strip())
-        self.rebuild_grid()
+
+            # Включить обновление интерфейса
+            self.window.after_idle(self.window.update_idletasks)
+            self.rebuild_grid()
 
     def clean_click(self):
         for entry in self.entries:

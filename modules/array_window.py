@@ -11,7 +11,6 @@ class ArrayWindow:
         self._window.title("Начальный массив")
         self.canvas = tk.Canvas(self._window)
         self.canvas.pack(side="top", fill="both", expand=True)
-
         self.entries = []
         self.frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.frame, anchor="nw")
@@ -22,7 +21,10 @@ class ArrayWindow:
 
         for i in range(len(data_entries)):
             entry = tk.Entry(self.frame)
+            row = i % 10
+            column = i // 10
             entry.insert(0, data_entries[i].get())
-            entry.grid()
+            entry.grid(row=row, column=column, sticky="nsew")
             self.entries.append(entry)
         self.rebuild_grid()
+        self.canvas.configure(scrollregion=self.canvas.bbox('all'))

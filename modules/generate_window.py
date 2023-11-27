@@ -6,11 +6,12 @@ import tkinter as tk
 
 
 class GenerationWindow:
-    def __init__(self, mainwindow, digit, frame, entries, canvas, icon=""):
+    def __init__(self, mainwindow, digit, frame, entries, canvas, on_close, icon=""):
         self._window = Toplevel(mainwindow)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
         self._window.resizable(False, False)
+        self.on_close = on_close
         self._frame = frame
         self._entries = entries
         self._canvas = canvas
@@ -48,3 +49,7 @@ class GenerationWindow:
         self._frame.update_idletasks()
         self._canvas.configure(scrollregion=self._canvas.bbox("all"))
         self._window.destroy()
+        if self.on_close:
+            self.on_close()
+
+

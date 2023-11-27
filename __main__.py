@@ -35,17 +35,11 @@ class MainWindow(MainsWindows):
         file_menu.add_command(label="Выход", command=self.exit_click)
 
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [
-                                        GenerationWindow(self.window, 1000, self.frame, self.entries, self.canvas),
-                                        self.rebuild_grid()])
+                                    command=lambda: [self.generation(1000)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [
-                                        GenerationWindow(self.window, 10000, self.frame, self.entries, self.canvas),
-                                    ])
+                                    command=lambda: [self.generation(10000)])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [
-                                        GenerationWindow(self.window, 100000, self.frame, self.entries, self.canvas),
-                                    ])
+                                    command=lambda: [self.generation(100000)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
@@ -87,6 +81,11 @@ class MainWindow(MainsWindows):
             f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
+    def generation(self, digit):
+        def on_generation_window_close():
+            self.rebuild_grid()
+
+        GenerationWindow(self.window, digit, self.frame, self.entries, self.canvas, on_generation_window_close)
     def add_entry(self):
         entry = tk.Entry(self.frame)
         self.entries.append(entry)

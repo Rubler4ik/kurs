@@ -41,11 +41,11 @@ class MainWindow(MainsWindows):
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
                                     command=lambda: [
                                         GenerationWindow(self.window, 10000, self.frame, self.entries, self.canvas),
-                                        self.rebuild_grid()])
+                                        ])
         generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
                                     command=lambda: [
                                         GenerationWindow(self.window, 100000, self.frame, self.entries, self.canvas),
-                                        self.rebuild_grid()])
+                                       ])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()

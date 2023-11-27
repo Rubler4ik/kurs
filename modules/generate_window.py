@@ -6,8 +6,8 @@ import tkinter as tk
 
 
 class GenerationWindow:
-    def __init__(self, mainwindow, digit, frame, entries, canvas, on_close, icon=""):
-        self._window = Toplevel(mainwindow)
+    def __init__(self, main_window, digit, frame, entries, canvas, on_close, icon=""):
+        self._window = Toplevel(main_window)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
         self._window.resizable(False, False)

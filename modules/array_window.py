@@ -3,9 +3,9 @@ from tkinter import *
 
 
 class ArrayWindow:
-    def __init__(self, mainwindow, data_entries, rebuild_grid):
-        self._window = Toplevel(mainwindow)
-        self.mainwindow = mainwindow
+    def __init__(self, main_window, data_entries, rebuild_grid):
+        self._window = Toplevel(main_window)
+        self.main_window = main_window
         self.rebuild_grid = rebuild_grid
         self._window.title("Начальный массив")
         self.canvas = tk.Canvas(self._window)

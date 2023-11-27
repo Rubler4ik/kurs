@@ -24,6 +24,7 @@ class MainWindow(MainsWindows):
         self.row = 0
         self.column = 0
         self.entries = []
+        max_widths = []
         self.current_file = None
         main_menu = Menu()
         file_menu = Menu()

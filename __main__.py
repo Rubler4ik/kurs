@@ -28,20 +28,13 @@ class MainWindow(MainsWindows):
         main_menu = Menu()
         file_menu = Menu()
         about = Menu()
-        # generation_menu = Menu()
+
         file_menu.add_command(label="Сохранить", command=self.save_click)
         file_menu.add_command(label="Сохранить как", command=self.save_how_click)
         file_menu.add_command(label="Открыть", command=self.open_click)
         file_menu.add_command(label="Очистить", command=self.clean_click)
         file_menu.add_separator()
         file_menu.add_command(label="Выход", command=self.exit_click)
-
-        # generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-        #  command=lambda: [self.generation(1000)])
-        # generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-        # command=lambda: [self.generation(10000)])
-        # generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-        #  command=lambda: [self.generation(100000)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()

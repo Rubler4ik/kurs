@@ -23,31 +23,31 @@ class GenerationWindow:
         gen100000 = "100000"
         gen_yours = "yours"
         self.label_start = ttk.Label(self._window, text="Введите начальное значение",
-                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+                                     justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         self.enter_start = ttk.Entry(self._window)
         self.label_end = ttk.Label(self._window, text="Введите конечное значение",
-                           justify="center", background="#FFCDD2", font="Arial,30", padding=8)
+                                   justify="center", background="#FFCDD2", font="Arial,30", padding=8)
         self.enter_end = ttk.Entry(self._window)
         self.Generation_value = StringVar(value=gen1000)
         self._choose()
         position = {"padx": 8, "pady": 6}
         self.btn_radio_1000 = Radiobutton(self._window, text="От 0 до 1000",
-                           background="#FFCDD2", font="Arial,30", value=gen1000, command=self._choose,
-                                              variable=self.Generation_value)
+                                          background="#FFCDD2", font="Arial,30", value=gen1000, command=self._choose,
+                                          variable=self.Generation_value)
 
         self.btn_radio_10000 = Radiobutton(self._window, text="От 0 до 10000",
-                            background="#FFCDD2", font="Arial,30",  value=gen10000, command=self._choose,
-                                               variable=self.Generation_value)
+                                           background="#FFCDD2", font="Arial,30", value=gen10000, command=self._choose,
+                                           variable=self.Generation_value)
 
-        self.btn_radio_100000 = Radiobutton(self._window,text="От 0 до 100000",
-                           background="#FFCDD2", font="Arial,30",  value=gen100000,
-                                                command=self._choose,
-                                                variable=self.Generation_value)
+        self.btn_radio_100000 = Radiobutton(self._window, text="От 0 до 100000",
+                                            background="#FFCDD2", font="Arial,30", value=gen100000,
+                                            command=self._choose,
+                                            variable=self.Generation_value)
 
         self.btn_radio_yours = Radiobutton(self._window,
-                             text="Свои значения",background="#FFCDD2", font="Arial,30",value=gen_yours,
-                                               command=self._choose,
-                                               variable=self.Generation_value)
+                                           text="Свои значения", background="#FFCDD2", font="Arial,30", value=gen_yours,
+                                           command=self._choose,
+                                           variable=self.Generation_value)
         self.btn_radio_1000.grid(row=0, column=0, **position)
         self.btn_radio_10000.grid(row=0, column=1, **position)
         self.btn_radio_100000.grid(row=0, column=2, **position)
@@ -58,11 +58,11 @@ class GenerationWindow:
         label1.grid(row=3, column=0, columnspan=4)
 
         digit_count_entry = Entry(self._window)
-        digit_count_entry.grid(row=4, column=1,columnspan=2, padx=10, pady=5)
+        digit_count_entry.grid(row=4, column=1, columnspan=2, padx=10, pady=5)
 
         btn1 = ttk.Button(self._window, text="Генерировать",
                           command=lambda: self._generate_numbers(self.digit_start, self.digit_end, digit_count_entry))
-        btn1.grid(row=5, column=1,columnspan=2, padx=20, pady=20, sticky="ew")
+        btn1.grid(row=5, column=1, columnspan=2, padx=20, pady=20, sticky="ew")
 
         self._window.update()
         self._window.geometry(
@@ -98,10 +98,10 @@ class GenerationWindow:
             self.label_end.grid_forget()
             self.enter_end.grid_forget()
         else:
-            self.label_start.grid(row=1, column=1,padx= 3, pady= 4)
-            self.enter_start.grid(row=1, column=2,padx= 3, pady= 4)
-            self.label_end.grid(row=2, column=1,padx= 3, pady= 4)
-            self.enter_end.grid(row=2, column=2,padx= 3, pady= 4)
+            self.label_start.grid(row=1, column=1, padx=3, pady=4)
+            self.enter_start.grid(row=1, column=2, padx=3, pady=4)
+            self.label_end.grid(row=2, column=1, padx=3, pady=4)
+            self.enter_end.grid(row=2, column=2, padx=3, pady=4)
 
     def _generation(self, digit_start, digit_end, digit_count):
         if self.Generation_value.get() == "yours":

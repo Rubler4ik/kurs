@@ -43,7 +43,6 @@ class MainWindow(MainsWindows):
         about.add_command(label="О программе", command=lambda: [AboutProgram(self.window)])
 
         main_menu.add_cascade(label="Файл", menu=file_menu)
-        # main_menu.add_cascade(label="Генерация чисел", menu=generation_menu)
         main_menu.add_cascade(label="Справка", menu=about)
 
         self.window.config(menu=main_menu)

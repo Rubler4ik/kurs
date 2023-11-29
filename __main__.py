@@ -28,7 +28,7 @@ class MainWindow(MainsWindows):
         main_menu = Menu()
         file_menu = Menu()
         about = Menu()
-        generation_menu = Menu()
+        # generation_menu = Menu()
         file_menu.add_command(label="Сохранить", command=self.save_click)
         file_menu.add_command(label="Сохранить как", command=self.save_how_click)
         file_menu.add_command(label="Открыть", command=self.open_click)
@@ -36,23 +36,25 @@ class MainWindow(MainsWindows):
         file_menu.add_separator()
         file_menu.add_command(label="Выход", command=self.exit_click)
 
-        generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
-                                    command=lambda: [self.generation(1000)])
-        generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
-                                    command=lambda: [self.generation(10000)])
-        generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
-                                    command=lambda: [self.generation(100000)])
+        # generation_menu.add_command(label="Генерировать случайные данные от 0 до 1000",
+        #  command=lambda: [self.generation(1000)])
+        # generation_menu.add_command(label="Генерировать случайные данные от 0 до 10000",
+        # command=lambda: [self.generation(10000)])
+        # generation_menu.add_command(label="Генерировать случайные данные от 0 до 100000",
+        #  command=lambda: [self.generation(100000)])
 
         about.add_command(label="Об авторе", command=lambda: [AboutAuthor(self.window)])
         about.add_separator()
         about.add_command(label="О программе", command=lambda: [AboutProgram(self.window)])
 
         main_menu.add_cascade(label="Файл", menu=file_menu)
-        main_menu.add_cascade(label="Генерация чисел", menu=generation_menu)
+        # main_menu.add_cascade(label="Генерация чисел", menu=generation_menu)
         main_menu.add_cascade(label="Справка", menu=about)
 
         self.window.config(menu=main_menu)
-
+        self.btn_generation = ttk.Button(self.window, text="Генерировать числа",
+                                         command=lambda: [self.generation()])
+        self.btn_generation.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.Sort = StringVar(value=upper)
         position = {"padx": 6, "pady": 6, "anchor": CENTER}
         self.btn_radio_up = ttk.Radiobutton(self.window, text="По возрастанию", value=upper, variable=self.Sort)
@@ -83,11 +85,11 @@ class MainWindow(MainsWindows):
             f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
-    def generation(self, digit):
+    def generation(self):
         def on_generation_window_close():
             self.rebuild_grid()
 
-        GenerationWindow(self.window, digit, self.frame, self.entries, self.canvas, on_generation_window_close)
+        GenerationWindow(self.window, self.frame, self.entries, self.canvas, on_generation_window_close)
 
     def add_entry(self):
         entry = tk.Entry(self.frame)

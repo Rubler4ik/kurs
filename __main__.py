@@ -6,6 +6,7 @@ import tkinter as tk
 
 from tkinter import filedialog
 import time
+import os
 from modules.about_windows import AboutAuthor, AboutProgram
 from modules.generate_window import GenerationWindow
 from modules.main_windows import MainsWindows
@@ -25,6 +26,7 @@ class MainWindow(MainsWindows):
         self.column = 0
         self.entries = []
         self.current_file = None
+        self.current_directory = os.getcwd()
         main_menu = Menu()
         file_menu = Menu()
         about = Menu()
@@ -108,8 +110,12 @@ class MainWindow(MainsWindows):
         self.canvas.configure(scrollregion=self.canvas.bbox('all'))
 
     def save_click(self):
+
         if self.current_file is None:
-            self.current_file = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
+            self.current_file = filedialog.asksaveasfilename(initialdir=self.current_directory,
+                                                             filetypes=[("Текстовые файлы", "*.txt")])
+            if not self.current_file:  # Если пользователь нажал "Отмена", self.current_file будет пустой строкой
+                return  # Прервать выполнение функции
             if not self.current_file.endswith(".txt"):
                 self.current_file += ".txt"
 
@@ -119,7 +125,9 @@ class MainWindow(MainsWindows):
                 file.write(text)
 
     def save_how_click(self):
-        self.current_file = filedialog.asksaveasfilename(filetypes=[("Текстовые файлы", "*.txt")])
+
+        self.current_file = filedialog.asksaveasfilename(initialdir=self.current_directory,
+                                                         filetypes=[("Текстовые файлы", "*.txt")])
         if self.current_file != "":
             if not self.current_file.endswith(".txt"):
                 self.current_file += ".txt"
@@ -128,7 +136,8 @@ class MainWindow(MainsWindows):
                 file.write(text)
 
     def open_click(self):
-        filepath = filedialog.askopenfilename(filetypes=[("Текстовые файлы", "*.txt")])
+        filepath = filedialog.askopenfilename(initialdir=self.current_directory,
+                                              filetypes=[("Текстовые файлы", "*.txt")])
         if filepath != "":
             self.clean_click()
             with open(filepath, "r") as file:

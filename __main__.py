@@ -135,36 +135,38 @@ class MainWindow(MainsWindows):
                 file.write(text)
 
     def open_click(self):
-        filepath = filedialog.askopenfilename(initialdir=self.current_directory,
-                                              filetypes=[("Текстовые файлы", "*.txt")])
-        if filepath != "":
-            self.clean_click()
-            with open(filepath, "r") as file:
-                lines = file.readlines()
+        self.clean_click()
+        self.current_file = filedialog.askopenfilename(initialdir=self.current_directory,
+                                                       filetypes=[("Текстовые файлы", "*.txt")])
+        if self.current_file:  # Если пользователь нажал "Отмена", self.current_file будет None
 
-            # Отключить обновление интерфейса
-            self.window.update_idletasks()
-            self.window.after_idle(self.window.update_idletasks)
+            if self.current_file is not None:
+                with open(self.current_file, "r") as file:
+                    lines = file.readlines()
 
-            # Удалить лишние поля ввода
-            while len(self.entries) > len(lines):
-                self.entries[-1].grid_forget()
-                self.entries.pop()
+                # Отключить обновление интерфейса
+                self.window.update_idletasks()
+                self.window.after_idle(self.window.update_idletasks)
 
-            # Добавить недостающие поля ввода
-            while len(self.entries) < len(lines):
-                entry = tk.Entry(self.frame)
-                entry.grid()
-                self.entries.append(entry)
+                # Удалить лишние поля ввода
+                while len(self.entries) > len(lines):
+                    self.entries[-1].grid_forget()
+                    self.entries.pop()
+
+                # Добавить недостающие поля ввода
+                while len(self.entries) < len(lines):
+                    entry = tk.Entry(self.frame)
+                    entry.grid()
+                    self.entries.append(entry)
 
             # Вставить строки из файла в поля ввода
-            for i, line in enumerate(lines):
-                self.entries[i].delete(0, 'end')
-                self.entries[i].insert(0, line.strip())
+                for i, line in enumerate(lines):
+                    self.entries[i].delete(0, 'end')
+                    self.entries[i].insert(0, line.strip())
 
             # Включить обновление интерфейса
-            self.window.after_idle(self.window.update_idletasks)
-            self.rebuild_grid()
+                self.window.after_idle(self.window.update_idletasks)
+                self.rebuild_grid()
 
     def clean_click(self):
         if self.current_file is None:

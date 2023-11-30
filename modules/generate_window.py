@@ -92,7 +92,7 @@ class GenerationWindow:
             self.label_end.grid_forget()
             self.enter_end.grid_forget()
         elif self.Generation_value.get() == "100000":
-            self.digit_end = 10000
+            self.digit_end = 100000
             self.label_start.grid_forget()
             self.enter_start.grid_forget()
             self.label_end.grid_forget()

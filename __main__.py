@@ -97,10 +97,21 @@ class MainWindow(MainsWindows):
             self.rebuild_grid()
 
     def rebuild_grid(self):
+        max_widths = [0] * 10  # Инициализация списка максимальных ширин для каждого столбца
+
         for i, entry in enumerate(self.entries):
             row = i % 10
             column = i // 10
             entry.grid(row=row, column=column, sticky="nsew")
+
+            # Обновляет максимальную ширину для текущего столбца
+            entry_width = entry.winfo_reqwidth()
+            max_widths[column] = max(max_widths[column], entry_width)
+
+        # Устанавливает ширину столбцов в соответствии с максимальными значениями
+        for i, width in enumerate(max_widths):
+            self.frame.columnconfigure(i, minsize=width)
+
         self.frame.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
@@ -159,12 +170,12 @@ class MainWindow(MainsWindows):
                     entry.grid()
                     self.entries.append(entry)
 
-            # Вставить строки из файла в поля ввода
+                # Вставить строки из файла в поля ввода
                 for i, line in enumerate(lines):
                     self.entries[i].delete(0, 'end')
                     self.entries[i].insert(0, line.strip())
 
-            # Включить обновление интерфейса
+                # Включить обновление интерфейса
                 self.window.after_idle(self.window.update_idletasks)
                 self.rebuild_grid()
 

@@ -81,27 +81,24 @@ class GenerationWindow:
     def _choose(self):
         if self.Generation_value.get() == "1000":
             self.digit_end = 1000
-            self.label_start.grid_forget()
-            self.enter_start.grid_forget()
-            self.label_end.grid_forget()
-            self.enter_end.grid_forget()
+            self.hide_entry()
         elif self.Generation_value.get() == "10000":
             self.digit_end = 10000
-            self.label_start.grid_forget()
-            self.enter_start.grid_forget()
-            self.label_end.grid_forget()
-            self.enter_end.grid_forget()
+            self.hide_entry()
         elif self.Generation_value.get() == "100000":
-            self.digit_end = 100000
-            self.label_start.grid_forget()
-            self.enter_start.grid_forget()
-            self.label_end.grid_forget()
-            self.enter_end.grid_forget()
+            self.digit_end = 10000
+            self.hide_entry()
         else:
             self.label_start.grid(row=1, column=1, padx=3, pady=4)
             self.enter_start.grid(row=1, column=2, padx=3, pady=4)
             self.label_end.grid(row=2, column=1, padx=3, pady=4)
             self.enter_end.grid(row=2, column=2, padx=3, pady=4)
+
+    def hide_entry(self):
+        self.label_start.grid_forget()
+        self.enter_start.grid_forget()
+        self.label_end.grid_forget()
+        self.enter_end.grid_forget()
 
     def _generation(self, digit_start, digit_end, digit_count):
         if self.Generation_value.get() == "yours":

@@ -86,7 +86,7 @@ class GenerationWindow:
             self.digit_end = 10000
             self.hide_entry()
         elif self.Generation_value.get() == "100000":
-            self.digit_end = 10000
+            self.digit_end = 100000
             self.hide_entry()
         else:
             self.label_start.grid(row=1, column=1, padx=3, pady=4)
@@ -109,10 +109,11 @@ class GenerationWindow:
                 showerror("Ошибка", "Вы ввели не число")
         for i in range(digit_count):
             random_digit = random.randint(digit_start, digit_end)
-            entry = tk.Entry(self._frame)
-            entry.insert(0, f"{random_digit}")
-            entry.grid(row=i % 10, column=i // 10, sticky="nsew")
+            entry = tk.Entry(self._frame, width=10)  # Set a fixed width for the empty entry
             self._entries.append(entry)
+            entry.insert(0, f"{random_digit}")
+            #entry.grid(row=i % 10, column=i // 10, sticky="nsew")
+            #self._entries.append(entry)
         self._frame.update_idletasks()
         self._canvas.configure(scrollregion=self._canvas.bbox("all"))
         self._window.destroy()

@@ -86,33 +86,47 @@ class MainWindow(MainsWindows):
         GenerationWindow(self.window, self.frame, self.entries, self.canvas, on_generation_window_close)
 
     def add_entry(self):
-        entry = tk.Entry(self.frame)
+        entry = tk.Entry(self.frame, width=10)  # Set a fixed width for the empty entry
         self.entries.append(entry)
         self.rebuild_grid()
 
     def delete_entry(self):
         if self.entries:
             entry = self.entries.pop()
-            entry.destroy()
+            entry.grid_forget()  # Forget the grid position
+            entry.destroy()  # Destroy the entry widget
             self.rebuild_grid()
 
     def rebuild_grid(self):
-        max_widths = [0] * 10  # Инициализация списка максимальных ширин для каждого столбца
+        # Clear the grid inside the frame
+        for widget in self.frame.winfo_children():
+            widget.grid_forget()
+
+        max_widths = [0] * 10
 
         for i, entry in enumerate(self.entries):
             row = i % 10
             column = i // 10
             entry.grid(row=row, column=column, sticky="nsew")
 
-            # Обновляет максимальную ширину для текущего столбца
-            entry_width = entry.winfo_reqwidth()
-            max_widths[column] = max(max_widths[column], entry_width)
+            # Use a hidden label for accurate measurement of entry width
+            hidden_label = tk.Label(self.frame, text=entry.get(), font=entry['font'])
+            text_width = hidden_label.winfo_width() + 5  # Add 5 pixels to the width
+            hidden_label.destroy()  # Destroy the hidden label after measurement
 
-        # Устанавливает ширину столбцов в соответствии с максимальными значениями
+            if column < 10:
+                max_widths[column] = max(max_widths[column], text_width)
+
         for i, width in enumerate(max_widths):
             self.frame.columnconfigure(i, minsize=width)
 
-        self.frame.update_idletasks()
+        for i, entry in enumerate(self.entries):
+            column = i % 10
+            # Set the width of empty entries to the width of the longest entry in the column
+            entry_width = max_widths[column] if entry.get() else 0
+            entry.config(width=entry_width, justify='left')
+
+        self.canvas.update_idletasks()
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def on_configure(self, _):

@@ -22,6 +22,7 @@ class MainWindow(MainsWindows):
         self._result_label = None
         upper = "upper"
         downer = "downer"
+        position = {"padx": 6, "pady": 6, "anchor": CENTER}
         self.row = 0
         self.column = 0
         self.entries = []
@@ -50,7 +51,7 @@ class MainWindow(MainsWindows):
                                          command=lambda: [self.generation()])
         self.btn_generation.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.Sort = StringVar(value=upper)
-        position = {"padx": 6, "pady": 6, "anchor": CENTER}
+
         self.btn_radio_up = ttk.Radiobutton(self.window, text="По возрастанию", value=upper, variable=self.Sort)
         self.btn_radio_up.pack(**position)
         self.btn_radio_down = ttk.Radiobutton(self.window, text="По убыванию", value=downer, variable=self.Sort)

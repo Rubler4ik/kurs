@@ -12,7 +12,7 @@ class MainsWindows:
         self.window = Tk()
         self.window.title(title)
         self.window.iconbitmap(default=icon)
-        self.window.resizable(resizable, resizable)
+        self.window.resizable(resizable, False)
         self.window.option_add("*tearOff", FALSE)
         if text != "":
             self.window.sort = Image.open(image).resize((100, 100))

@@ -80,10 +80,10 @@ class MainWindow(MainsWindows):
             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
     def generation(self):
-        def on_generation_window_close():
+        def on_generation():
             self.rebuild_grid()
 
-        GenerationWindow(self.window, self.frame, self.entries, self.canvas, on_generation_window_close)
+        GenerationWindow(self.window, self.frame, self.entries, self.canvas, on_generation)
 
     def add_entry(self):
         entry = tk.Entry(self.frame, width=10)  # Set a fixed width for the empty entry
@@ -314,15 +314,21 @@ class StartWindow(MainsWindows):
                          'materials/OIG.4r2eWaC.png',
                          "Минск, 2023",
                          FALSE, MainWindow)
-        try:
-            self.window.after(60000, self.close_start_window)
-        except TclError:
-            pass
-        else:
-            pass
+        self.btn1 = ttk.Button(self.window, text="Выход", command=self.exit_func)
+        self.btn1.pack()
+        self.btn2 = ttk.Button(self.window, text="Далее", command=self.next_func)
+        self.btn2.pack()
+        self.after_id = self.window.after(60000, self.exit_func)
 
-    def close_start_window(self):
+    def exit_func(self):
         self.window.destroy()
+
+    def next_func(self):
+        if self.after_id is not None:
+            self.window.after_cancel(self.after_id)
+        self.window.destroy()
+        self.main_window = self._window()
+        self.main_window.window.mainloop()
 
 
 start_window = StartWindow()

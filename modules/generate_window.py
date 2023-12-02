@@ -6,13 +6,13 @@ import tkinter as tk
 
 
 class GenerationWindow:
-    def __init__(self, main_window, frame, entries, canvas, on_close, icon=""):
+    def __init__(self, main_window, frame, entries, canvas, rebuild, icon=""):
         self._window = Toplevel(main_window)
         self._window.title("Генератор чисел")
         self._window.iconbitmap(default=icon)
         self._window.resizable(False, False)
         self._window["bg"] = "#FFCDD2"
-        self.on_close = on_close
+        self.rebuild = rebuild
         self._frame = frame
         self._entries = entries
         self._canvas = canvas
@@ -109,13 +109,16 @@ class GenerationWindow:
                 showerror("Ошибка", "Вы ввели не число")
         for i in range(digit_count):
             random_digit = random.randint(digit_start, digit_end)
-            entry = tk.Entry(self._frame, width=10)  # Set a fixed width for the empty entry
+            # Внутри метода _generation, после вставки сгенерированного числа
+            entry = tk.Entry(self._frame, width=10)
             self._entries.append(entry)
             entry.insert(0, f"{random_digit}")
-            # entry.grid(row=i % 10, column=i // 10, sticky="nsew")
-            # self._entries.append(entry)
+
+            # Обновите ширину Entry на основе нового содержимого
+            entry_width = len(str(random_digit)) * 8  # Подстройте множитель по необходимости
+            entry.config(width=entry_width, justify='left')
+
         self._frame.update_idletasks()
+        self.rebuild()
         self._canvas.configure(scrollregion=self._canvas.bbox("all"))
         self._window.destroy()
-        if self.on_close:
-            self.on_close()

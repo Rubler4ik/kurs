@@ -314,10 +314,16 @@ class StartWindow(MainsWindows):
                          'materials/OIG.4r2eWaC.png',
                          "Минск, 2023",
                          FALSE, MainWindow)
-        self.btn1 = ttk.Button(self.window, text="Выход", command=self.exit_func)
-        self.btn1.pack()
-        self.btn2 = ttk.Button(self.window, text="Далее", command=self.next_func)
-        self.btn2.pack()
+        self.btn1 = ttk.Button(self.window, text="Выход", command=self.exit_func, width=15, style='my.TButton')
+        self.btn1.pack(side=tk.LEFT, pady=6, padx=40)
+
+        # Создаем кнопку "Далее" и устанавливаем ее справа
+        self.btn2 = ttk.Button(self.window, text="Далее", command=self.next_func, width=15, style='my.TButton')
+        self.btn2.pack(side=tk.RIGHT, pady=6, padx=40)
+
+        # Создаем стиль для кнопок
+        self.style = ttk.Style()
+        self.style.configure('my.TButton', background='#FFEE58', font=('Arial Black', 11))
         self.after_id = self.window.after(60000, self.exit_func)
 
     def exit_func(self):

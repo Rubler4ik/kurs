@@ -5,8 +5,10 @@ from PIL import Image, ImageTk
 
 
 class MainsWindows:
-    def __init__(self, title, text, text2, text3, text4, text5, text6, image, text7, resizable,
+    def __init__(self, title, text, text2, text3, text4, text5, text6, image, text7, resizable, next_window,
                  icon="materials/sort-2_icon-icons.com_69583.ico"):
+        self.main_window = None
+        self._window = next_window
         self.window = Tk()
         self.window.title(title)
         self.window.iconbitmap(default=icon)
@@ -41,8 +43,19 @@ class MainsWindows:
 
             ttk.Label(self.window, text=text7, background="#FFCDD2", justify=CENTER, font=('Arial Black', 10),
                       padding=0).pack(anchor="s", pady=5)
-
+            self.btn1 = ttk.Button(self.window, text="Выход", command=self.exit_func)
+            self.btn1.pack()
+            self.btn2 = ttk.Button(self.window, text="Далее", command=self.next_func)
+            self.btn2.pack()
         self.window.update()
         self.window.geometry(
             f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
+
+    def exit_func(self):
+        self.window.destroy()
+
+    def next_func(self):
+        self.window.destroy()
+        self.main_window = self._window()
+        self.main_window.window.mainloop()

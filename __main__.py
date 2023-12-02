@@ -17,7 +17,7 @@ class MainWindow(MainsWindows):
     def __init__(self):
         super().__init__("Программа сортировщик",
                          "", "", "", "", "", "", "", "",
-                         TRUE)
+                         TRUE, None)
         self._data_entries = None
         self._result_label = None
         upper = "upper"
@@ -98,7 +98,7 @@ class MainWindow(MainsWindows):
             self.rebuild_grid()
 
     def rebuild_grid(self):
-        # Clear the grid inside the frame
+
         for widget in self.frame.winfo_children():
             widget.grid_forget()
 
@@ -220,6 +220,7 @@ class MainWindow(MainsWindows):
             self.rebuild_grid()
 
     def exit_click(self):
+
         self.window.destroy()
 
     def sort(self, data_entries, type_sort, result_label):
@@ -239,7 +240,7 @@ class MainWindow(MainsWindows):
             showerror("Ошибка", f"Ошибка: {e}")
 
         else:
-            ArrayWindow(self.window, self._data_entries, self.rebuild_grid)
+            ArrayWindow(self.window, self._data_entries)
             start_time = time.time()
             if type_sort == "upper":
                 swapped = True
@@ -312,14 +313,16 @@ class StartWindow(MainsWindows):
                          "\nСидорик Валерий Владимирович",
                          'materials/OIG.4r2eWaC.png',
                          "Минск, 2023",
-                         FALSE)
-        self.window.after(5000, self.close_start_window)
-        self.main_window = None
+                         FALSE, MainWindow)
+        try:
+            self.window.after(60000, self.close_start_window)
+        except TclError:
+            pass
+        else:
+            pass
 
     def close_start_window(self):
         self.window.destroy()
-        self.main_window = MainWindow()
-        self.main_window.window.mainloop()
 
 
 start_window = StartWindow()

@@ -63,7 +63,7 @@ class MainWindow(MainsWindows):
         self.btn1.pack(anchor="nw", padx=20, pady=6, fill=X)
         self.btn2 = ttk.Button(self.window, text="Удалить элемент", command=self.delete_entry)
         self.btn2.pack(anchor="nw", padx=20, pady=6, fill=X)
-        self.canvas = tk.Canvas(self.window, height=240)
+        self.canvas = tk.Canvas(self.window, height=120)
         self.canvas.pack(side="top", fill="both", padx=20, pady=6, expand=True)
 
         self.frame = tk.Frame(self.canvas)
@@ -74,7 +74,7 @@ class MainWindow(MainsWindows):
         self.canvas.configure(xscrollcommand=self.HorScrollBar.set)
         self.canvas.bind('<Configure>', self.on_configure)
         self.window.update()
-        self.window.geometry(f"{self.window.winfo_width()}x440+"
+        self.window.geometry(f"{self.window.winfo_width()}x460+"
                              f"{self.window.winfo_screenwidth() // 2 - 150}+"
                              f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
@@ -106,12 +106,13 @@ class MainWindow(MainsWindows):
         for i, entry in enumerate(self.entries):
             row = i % 10
             column = i // 10
-            entry.grid(row=row, column=column, sticky="nsew")
 
-            # Use a hidden label for accurate measurement of entry width
+            # Используйте скрытую метку для точного измерения ширины виджета Entry
             hidden_label = tk.Label(self.frame, text=entry.get(), font=entry['font'])
-            text_width = hidden_label.winfo_width() + 5  # Add 5 pixels to the width
-            hidden_label.destroy()  # Destroy the hidden label after measurement
+            text_width = hidden_label.winfo_width() + 5  # Добавьте 5 пикселей к ширине
+            hidden_label.destroy()  # Уничтожьте скрытую метку после измерения
+
+            entry.grid(row=row, column=column, sticky="nsew")
 
             if column < 10:
                 max_widths[column] = max(max_widths[column], text_width)
@@ -121,7 +122,8 @@ class MainWindow(MainsWindows):
 
         for i, entry in enumerate(self.entries):
             column = i % 10
-            # Set the width of empty entries to the width of the longest entry in the column
+
+            # Установите ширину пустых записей равной ширине самой длинной записи в столбце
             entry_width = max_widths[column] if entry.get() else 0
             entry.config(width=entry_width, justify='left')
 

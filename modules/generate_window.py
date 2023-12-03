@@ -101,6 +101,7 @@ class GenerationWindow:
         self.enter_end.grid_forget()
 
     def _generation(self, digit_start, digit_end, digit_count):
+
         if self.Generation_value.get() == "yours":
             try:
                 digit_start = int(self.enter_start.get())
@@ -113,9 +114,8 @@ class GenerationWindow:
             entry = tk.Entry(self._frame)
             self._entries.append(entry)
             entry.insert(0, f"{random_digit}")
-
-            # Обновите ширину Entry на основе нового содержимого
-            entry_width = len(str(random_digit)) * 8  # Подстройте множитель по необходимости
+            entry.update_idletasks()
+            entry_width = entry.winfo_width() + 5  # Добавьте 5 пикселей к ширине
             entry.config(width=entry_width, justify='left')
 
         self._frame.update_idletasks()

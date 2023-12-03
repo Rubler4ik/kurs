@@ -1,6 +1,6 @@
 from tkinter import Toplevel, ttk, LEFT
 from PIL import Image, ImageTk
-
+import tkinter as tk
 
 class AboutWindow:
     def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
@@ -17,6 +17,9 @@ class AboutWindow:
 
         self._window.grab_set()
 
+    def exit_func(self):
+        self._window.destroy()
+
 
 class AboutAuthor(AboutWindow):
     def __init__(self, mainwindow):
@@ -29,6 +32,13 @@ class AboutAuthor(AboutWindow):
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
             f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
+        self.btn1 = ttk.Button(self._window, text="Выход", command=self.exit_func, width=15, style='my.TButton')
+        self.btn1.pack(side=tk.LEFT, pady=6, padx=40)
+        self.style = ttk.Style()
+        self.style.configure('my.TButton', background='#FFEE58', font=('Arial Black', 11))
+
+
+
 
 
 class AboutProgram(AboutWindow):
@@ -46,7 +56,12 @@ class AboutProgram(AboutWindow):
                          'materials/images.png')
         self.label_image.pack(side=LEFT)
         self.label.pack(expand=True)
+        self.btn1 = ttk.Button(self._window, text="Выход", command=self.exit_func, width=15, style='my.TButton')
+        self.btn1.pack(anchor="center", pady=6, padx=40)
+        self.style = ttk.Style()
+        self.style.configure('my.TButton', background='#FFEE58', font=('Arial Black', 11))
         self._window.update()
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
             f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
+

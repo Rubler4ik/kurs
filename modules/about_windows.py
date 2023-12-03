@@ -4,8 +4,8 @@ import tkinter as tk
 
 
 class AboutWindow:
-    def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
-        self._window = Toplevel(mainwindow)
+    def __init__(self, main_window, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
+        self._window = Toplevel(main_window)
         self._window.title(title)
         self._window["bg"] = "#FFCDD2"
         self._window.iconbitmap(default=icon)
@@ -23,8 +23,8 @@ class AboutWindow:
 
 
 class AboutAuthor(AboutWindow):
-    def __init__(self, mainwindow):
-        super().__init__(mainwindow, "Сведения об авторе",
+    def __init__(self, main_window):
+        super().__init__(main_window, "Сведения об авторе",
                          "Автор: Гришко Дмитрий Игоревич\nГруппа: 10701222\nE-mail: dimagrishkoby@gmail.com ",
                          'materials/photo_2023-11-20_11-17-08.jpg')
         self.label_image.pack(anchor="n")
@@ -40,8 +40,8 @@ class AboutAuthor(AboutWindow):
 
 
 class AboutProgram(AboutWindow):
-    def __init__(self, mainwindow):
-        super().__init__(mainwindow, "О программе: Сортировщик",
+    def __init__(self, main_window):
+        super().__init__(main_window, "О программе: Сортировщик",
                          "Программа сортирует числовые данные\nПри помощи метода перемешивания"
                          "\nЭта программа использует алгоритм сортировки перемешиванием\n "
                          "(или коктейльной сортировки), который является вариацией пузырьковой сортировки.\n "

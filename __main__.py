@@ -18,6 +18,7 @@ class MainWindow(MainsWindows):
         super().__init__("Программа сортировщик",
                          "", "", "", "", "", "", "", "",
                          TRUE, None)
+
         self._data_entries = None
         self._result_label = None
         upper = "upper"
@@ -76,9 +77,9 @@ class MainWindow(MainsWindows):
         self.canvas.configure(xscrollcommand=self.HorScrollBar.set)
         self.canvas.bind('<Configure>', self.on_configure)
         self.window.update()
-        self.window.geometry(
-            f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
-            f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
+        self.window.geometry(f"{self.window.winfo_width()}x440+"
+                             f"{self.window.winfo_screenwidth() // 2 - 150}+"
+                             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
 
     def generation(self):
         def on_generation():

@@ -92,8 +92,8 @@ class MainWindow(MainsWindows):
     def delete_entry(self):
         if self.entries:
             entry = self.entries.pop()
-            entry.grid_forget()  # Forget the grid position
-            entry.destroy()  # Destroy the entry widget
+            entry.grid_forget()
+            entry.destroy()
             self.rebuild_grid()
 
     def rebuild_grid(self):

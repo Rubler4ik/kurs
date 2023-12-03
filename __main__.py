@@ -295,7 +295,7 @@ class MainWindow(MainsWindows):
                             self._data_entries[i - 1].delete(0, 'end')
                             self._data_entries[i - 1].insert(0, str(a))
                             swapped = True
-
+            self.rebuild_grid()
             end_time = time.time()
             execution_time = round((end_time - start_time), 5)
             self._result_label.config(text=f"Время выполнения сортировки: {execution_time}")

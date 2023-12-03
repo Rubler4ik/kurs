@@ -110,7 +110,7 @@ class GenerationWindow:
         for i in range(digit_count):
             random_digit = random.randint(digit_start, digit_end)
             # Внутри метода _generation, после вставки сгенерированного числа
-            entry = tk.Entry(self._frame, width=10)
+            entry = tk.Entry(self._frame)
             self._entries.append(entry)
             entry.insert(0, f"{random_digit}")
 

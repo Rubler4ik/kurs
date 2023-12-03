@@ -2,6 +2,7 @@ from tkinter import Toplevel, ttk, LEFT
 from PIL import Image, ImageTk
 import tkinter as tk
 
+
 class AboutWindow:
     def __init__(self, mainwindow, title, text, image, icon="materials/sort-2_icon-icons.com_69583.ico"):
         self._window = Toplevel(mainwindow)
@@ -38,9 +39,6 @@ class AboutAuthor(AboutWindow):
         self.style.configure('my.TButton', background='#FFEE58', font=('Arial Black', 11))
 
 
-
-
-
 class AboutProgram(AboutWindow):
     def __init__(self, mainwindow):
         super().__init__(mainwindow, "О программе: Сортировщик",
@@ -64,4 +62,3 @@ class AboutProgram(AboutWindow):
         self._window.geometry(
             f"+{self._window.winfo_screenwidth() // 2 - self._window.winfo_width() // 2}+"
             f"{self._window.winfo_screenheight() // 2 - self._window.winfo_height() // 2}")
-

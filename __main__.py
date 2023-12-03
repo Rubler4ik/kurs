@@ -7,10 +7,7 @@ import tkinter as tk
 from tkinter import filedialog
 import time
 import os
-from modules.about_windows import AboutAuthor, AboutProgram
-from modules.generate_window import GenerationWindow
-from modules.main_windows import MainsWindows
-from modules.array_window import ArrayWindow
+from modules import *
 
 
 class MainWindow(MainsWindows):

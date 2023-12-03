@@ -48,5 +48,3 @@ class MainsWindows:
         self.window.geometry(
             f"+{self.window.winfo_screenwidth() // 2 - self.window.winfo_width() // 2}+"
             f"{self.window.winfo_screenheight() // 2 - self.window.winfo_height() // 2}")
-
-

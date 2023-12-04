@@ -73,6 +73,7 @@ class MainWindow(MainsWindows):
         self.HorScrollBar.pack(side="bottom", fill="x")
         self.canvas.configure(xscrollcommand=self.HorScrollBar.set)
         self.canvas.bind('<Configure>', self.on_configure)
+
         self.window.update()
         self.window.geometry(f"{self.window.winfo_width()}x460+"
                              f"{self.window.winfo_screenwidth() // 2 - 150}+"
@@ -84,9 +85,41 @@ class MainWindow(MainsWindows):
 
         GenerationWindow(self.window, self.frame, self.entries, self.canvas, on_generation)
 
+    def bind_entries_events(self):
+        # Bind events to handle Enter key and arrow keys for each entry widget
+        for entry in self.entries:
+            entry.bind('<Return>', self.on_enter_pressed)
+            entry.bind('<Up>', lambda event, widget=entry: self.focus_previous_widget(widget))
+            entry.bind('<Down>', lambda event, widget=entry: self.focus_next_widget(widget))
+
+    def on_enter_pressed(self, event):
+        # Move focus to the next entry when Enter key is pressed
+        current_entry = self.window.focus_get()
+        index = self.entries.index(current_entry)
+        if index == len(self.entries) - 1:  # Check if the current entry is the last one
+            self.add_entry()  # Call the add_entry function
+            next_index = (index + 1) % len(self.entries)
+            self.entries[next_index].focus_set()
+        else:
+            next_index = (index + 1) % len(self.entries)
+            self.entries[next_index].focus_set()
+
+    def focus_previous_widget(self, current_widget):
+        # Move focus to the previous entry when the Up arrow key is pressed
+        index = self.entries.index(current_widget)
+        previous_index = (index - 1) % len(self.entries)
+        self.entries[previous_index].focus_set()
+
+    def focus_next_widget(self, current_widget):
+        # Move focus to the next entry when the Down arrow key is pressed
+        index = self.entries.index(current_widget)
+        next_index = (index + 1) % len(self.entries)
+        self.entries[next_index].focus_set()
+
     def add_entry(self):
-        entry = tk.Entry(self.frame, width=10)  # Set a fixed width for the empty entry
+        entry = tk.Entry(self.frame, width=5)  # Set a fixed width for the empty entry
         self.entries.append(entry)
+        self.bind_entries_events()
         self.rebuild_grid()
 
     def delete_entry(self):
